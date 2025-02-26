@@ -11,7 +11,7 @@
         "API_INSTANCE": "tabby-wheel-games",
         "BASIC_AUTH_USER": "admin",
         "BASIC_AUTH_PASSWORD": "password",
-        "PORT": "3000",
+        "PORT": "3013",
         "LOG_LEVEL": "debug",
         "JWT_SECRET": "asMG?53sdsfkl5kv)1.d.0eui11",
         "REDIS_CONNECTION": "redis://127.0.0.1:6379",
