@@ -1,21 +1,11 @@
 {
-  "name": "bulk-worker",
+  "name": "dev-tabby-bulk-worker",
   "instances": "1",
   "script": "./modules/bulk-worker.js",
   "env": {
     "TZ": "Europe/Moscow",
     "NODE_ENV": "development",
     "LOG_LEVEL": "debug",
-    "CLICKHOUSE_HOST": "84.201.144.141",
-    "CLICKHOUSE_PORT": "8123",
-    "CLICKHOUSE_DATABASE": "beeline_dev",
-    "CLICKHOUSE_LOGIN": "default",
-    "CLICKHOUSE_PASSWORD": "helloworld163f8c4e262f87e1bc0c1f3af2"
-  },
-  "env_production": {
-    "TZ": "Europe/Moscow",
-    "NODE_ENV": "production",
-    "LOG_LEVEL": "warn",
     "CLICKHOUSE_HOST": "84.201.144.141",
     "CLICKHOUSE_PORT": "8123",
     "CLICKHOUSE_DATABASE": "beeline_dev",
