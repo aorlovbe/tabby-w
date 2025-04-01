@@ -1,4 +1,4 @@
-const commonConfig = require("../gaming-files/cbmap.json");
+// const commonConfig = require("../gaming-files/cbmap.json");
 let _ = require("lodash");
 const moment = require("moment");
 const timeZone = require("moment-timezone");
