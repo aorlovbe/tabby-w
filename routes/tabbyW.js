@@ -2,46 +2,46 @@ const polka = require("polka");
 const router = polka();
 const passport = require("../middleware/passport-auth");
 const log = require("../services/bunyan").log;
-const SMS = require("../middleware/sms");
+// const SMS = require("../middleware/sms");
 const API = require("../middleware/api");
 const Token = require("../middleware/tokens");
-const Achievement = require("../api/achievements");
-const Rewards = require("../api/rewards");
-const Counter = require("../api/counters");
-const Dialog = require("../api/dialogs");
-const Task = require("../api/tasks");
-const Increment = require("../api/increments");
-const Items = require("../api/items");
-const Profile = require("../api/profiles");
-const User = require("../api/users");
+// const Achievement = require("../api/achievements");
+// const Rewards = require("../api/rewards");
+// const Counter = require("../api/counters");
+// const Dialog = require("../api/dialogs");
+// const Task = require("../api/tasks");
+// const Increment = require("../api/increments");
+// const Items = require("../api/items");
+// const Profile = require("../api/profiles");
+// const User = require("../api/users");
 const Leaderboard = require("../api/leaderboard");
-const _ = require("lodash");
-const async = require("async");
-const utils = require("../services/utils");
-//External packs method
-const Pack = require("../api/packs");
+// const _ = require("lodash");
+// const async = require("async");
+// const utils = require("../services/utils");
+// //External packs method
+// const Pack = require("../api/packs");
 
 const send = require("@polka/send-type");
-const Game = require("../api/games");
-const sha = require("../services/sha");
+// const Game = require("../api/games");
+// const sha = require("../services/sha");
 const redis = require("../services/redis").redisclient_rewarder;
 const moment = require("moment");
 const momentTimezone = require("moment-timezone");
-const bulk = require("../services/bulk");
-const Nakama = require("../middleware/nakama");
-const crate = require("../services/crateio");
+// const bulk = require("../services/bulk");
+// const Nakama = require("../middleware/nakama");
+// const crate = require("../services/crateio");
 // const usersTasks = require("../customer_task_eligibility.csv");
-const rateLimit = require("express-rate-limit");
-const accelera = require("../services/producer");
-const Achievements = require("../api/achievements");
-const timeZone = require("moment-timezone");
-const nanoid = require("../services/nanoid");
+// const rateLimit = require("express-rate-limit");
+// const accelera = require("../services/producer");
+// const Achievements = require("../api/achievements");
+// const timeZone = require("moment-timezone");
+// const nanoid = require("../services/nanoid");
 // const {
 //   // createDefaultUserCounters,
 //   // addAttemptsToDonor,
 // } = require("../middleware/gameconfig");
-const fs = require("fs");
-const csv = require("csv-parser");
+// const fs = require("fs");
+// const csv = require("csv-parser");
 
 //Services activation from games (with token)
 router.post(
