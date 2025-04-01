@@ -1,31 +1,47 @@
-const csvToJson = require("csvtojson");
-const Tasks = require("./api/tasks");
-const Profiles = require("./api/profiles");
-const { publishTrigger } = require("./services/producer");
-const { log } = require("./services/bunyan");
+const csv = require("csv-parser");
+const fs = require("fs");
+const path = require("path");
+const filePath = path.join(__dirname, "./customer.csv");
 
-const processRecipients = async () => {
-  const arr = [];
-  const recipients = await csvToJson({
-    trim: true,
-  }).fromFile("./customer.csv");
+async function processCsvFile(filePath) {
+  try {
+    const results = [];
 
-  recipients.forEach((recipient) => {
-    arr.push(recipient);
+    const records = await new Promise((resolve, reject) => {
+      const results = [];
+
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on("data", (data) => results.push(data))
+        .on("error", reject)
+        .on("end", () => resolve(results));
+    });
+
+    records.forEach((record) => {
+      const tasks = Object.entries(record)
+        .slice(1)
+        .filter(([, value]) => value === "True")
+        .map(([key]) => key);
+
+      results.push({
+        [record.client_id]: tasks,
+      });
+    });
+
+    return results;
+  } catch (error) {
+    console.error("Ошибка при обработке файла:", error);
+    return [];
+  }
+}
+
+processCsvFile(filePath).then((results) => {
+  results.forEach((el) => {
+    const clientId = Object.keys(el);
+    /*
+    redis.hset('platfform:tabbyw:' + clientId, JSON.stringify(el.clientId))
+    */
   });
-  return arr;
-};
 
-const process = async () => {
-  const arr = await processRecipients();
-  arr.forEach((el) => {
-    const req = {
-      body: {
-        id: el.client_id,
-      },
-    };
-
-    const profile_id = Profiles.findbyuser(req);
-
-
-};
+  console.log(JSON.stringify(results));
+});

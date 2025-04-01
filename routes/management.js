@@ -178,6 +178,19 @@ router.put(
   }
 );
 
+router.put(
+  "/balance",
+  passport.authenticate("management", { session: false }),
+  (req, res, next) => {
+    log.debug("Received counters request:", req.body);
+
+    Counter.modify(req, function (err, counter) {
+      if (err) return res.end("Failed");
+      res.end(JSON.stringify(counter));
+    });
+  }
+);
+
 router.delete(
   "/counters/remove",
   passport.authenticate("management", { session: false }),

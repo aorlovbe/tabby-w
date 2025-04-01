@@ -37,8 +37,8 @@ const momentTimezone = require("moment-timezone");
 // const timeZone = require("moment-timezone");
 // const nanoid = require("../services/nanoid");
 // const {
-//   // createDefaultUserCounters,
-//   // addAttemptsToDonor,
+//   createDefaultUserCounters,
+//   addAttemptsToDonor,
 // } = require("../middleware/gameconfig");
 // const fs = require("fs");
 // const csv = require("csv-parser");
@@ -48,27 +48,25 @@ router.post(
   "/settings",
   passport.authenticate("api", { session: false }),
   API.getGame,
-  Token.Decrypt,
+  // Token.Decrypt,
   // API.Counters,
   // API.isBlockedClient,
   // API.isBlocked,
   // API.isBlockedIP,
   async (req, res, next) => {
     // await createDefaultUserCounters(req);
+    // const availablePrizes =
+    // const availableTasks =
+    //   "[]Взять последний список, найти пользователя, если тру, добавить задание в массив";
+    // // send(res, 200, {
+    // //   status: "ok",
+    // //   onboarding: req.body.counters.onboarding === "true",
+    // //   attempts: req.body.counters.attempt,
+    // //   referalCode: req.body.token.profile_id,
+    // //   prizes: [availablePrizes],
+    // //   tasks: [availableTasks],
+    // // });
 
-    const availablePrizes =
-      "[]Взять последний список, найти пользователя, если тру, добавить приз в массив";
-    const availableTasks =
-      "[]Взять последний список, найти пользователя, если тру, добавить задание в массив";
-
-    // send(res, 200, {
-    //   status: "ok",
-    //   onboarding: req.body.counters.onboarding === "true",
-    //   attempts: req.body.counters.attempt,
-    //   referalCode: req.body.token.profile_id,
-    //   prizes: [availablePrizes],
-    //   tasks: [availableTasks],
-    // });
     send(res, 200, {
       status: "ok",
       onboarding: false,
@@ -89,71 +87,138 @@ router.post(
 );
 
 router.post(
-  "/onboarding-completed",
+  "/tasks",
   passport.authenticate("api", { session: false }),
   API.getGame,
-  Token.Decrypt,
-  API.Counters,
-  API.isBlockedClient,
-  API.isBlocked,
-  API.isBlockedIP,
   async (req, res, next) => {
-    // if (
-    //   req.body.counters.onboarding === undefined ||
-    //   req.body.counters.onboarding === "true"
-    // ) {
-    //   const onboarding = await new Promise((resolve, reject) =>
-    //     Counter.create(
-    //       {
-    //         body: {
-    //           game_id: req.body.game.game_id,
-    //           profile_id: req.body.profile_id,
-    //           name: "onboarding",
-    //           value: "false",
-    //         },
-    //       },
-    //       function (err, onboarding) {
-    //         err ? reject(err) : resolve(onboarding);
-    //       }
-    //     )
-    //   );
-
-    //   req.body.counters.onboarding = onboarding["onboarding"];
-    // }
-    // let event = {
-    //   event: "game",
-    //   page: "onboarding",
-    //   status: "finish",
-    //   game_id: req.body.game.game_id,
-    //   player_id:
-    //     req.body.player_id === undefined ? "" : req.body.player_id.toString(),
-    //   timestamp: Math.floor(new Date()),
-    //   date: moment(new Date()).format("YYYY-MM-DD"),
-    //   time: moment(new Date()).format("HH:mm"),
-    //   datetime: moment(momentTimezone.tz("Europe/Moscow")).format(
-    //     "YYYY-MM-DD HH:mm:ss"
-    //   ),
-    // };
-
-    // bulk.store(req.body.game.game_id, JSON.stringify(event), function (err) {
-    //   if (err) {
-    //     log.error(
-    //       "Error while storing webhooks messages for Clickhouse bulk:",
-    //       err
-    //     );
-    //   }
-    // });
     send(res, 200, {
       status: "ok",
+      onboarding: false,
+      attempts: 1,
+      prizes: [
+        "task_1",
+        "task_3",
+        "task_5",
+        "task_6",
+        "task_7",
+        "task_9",
+        "task_10",
+        "task_11",
+      ],
     });
   }
 );
+
+// router.post(
+//   "/balance",
+//   passport.authenticate("api", { session: false }),
+//   API.getGame,
+//   API.Counters,
+//   async (req, res, next) => {
+//     const attemptCount = req.body.value;
+
+//     const attempt = await new Promise((resolve, reject) =>
+//       Counter.create(
+//         {
+//           body: {
+//             game_id: req.body.game.game_id,
+//             profile_id: req.body.profile_id,
+//             name: "attempt",
+//             value: attemptCount,
+//           },
+//         },
+//         function (err, attempt) {
+//           err ? reject(err) : resolve(attempt);
+//         }
+//       )
+//     );
+
+//     req.body.counters.attempt = attempt["attempt"];
+
+//     send(res, 200, {
+//       status: "ok",
+//       onboarding: false,
+//       attempts: 1,
+//       prizes: [
+//         "task_1",
+//         "task_3",
+//         "task_5",
+//         "task_6",
+//         "task_7",
+//         "task_9",
+//         "task_10",
+//         "task_11",
+//       ],
+//     });
+//   }
+// );
+
+// router.post(
+//   "/onboarding-completed",
+//   passport.authenticate("api", { session: false }),
+//   API.getGame,
+//   Token.Decrypt,
+//   API.Counters,
+//   API.isBlockedClient,
+//   API.isBlocked,
+//   API.isBlockedIP,
+//   async (req, res, next) => {
+//     // if (
+//     //   req.body.counters.onboarding === undefined ||
+//     //   req.body.counters.onboarding === "true"
+//     // ) {
+//     //   const onboarding = await new Promise((resolve, reject) =>
+//     //     Counter.create(
+//     //       {
+//     //         body: {
+//     //           game_id: req.body.game.game_id,
+//     //           profile_id: req.body.profile_id,
+//     //           name: "onboarding",
+//     //           value: "false",
+//     //         },
+//     //       },
+//     //       function (err, onboarding) {
+//     //         err ? reject(err) : resolve(onboarding);
+//     //       }
+//     //     )
+//     //   );
+
+//     //   req.body.counters.onboarding = onboarding["onboarding"];
+//     // }
+//     // let event = {
+//     //   event: "game",
+//     //   page: "onboarding",
+//     //   status: "finish",
+//     //   game_id: req.body.game.game_id,
+//     //   player_id:
+//     //     req.body.player_id === undefined ? "" : req.body.player_id.toString(),
+//     //   timestamp: Math.floor(new Date()),
+//     //   date: moment(new Date()).format("YYYY-MM-DD"),
+//     //   time: moment(new Date()).format("HH:mm"),
+//     //   datetime: moment(momentTimezone.tz("Europe/Moscow")).format(
+//     //     "YYYY-MM-DD HH:mm:ss"
+//     //   ),
+//     // };
+
+//     // bulk.store(req.body.game.game_id, JSON.stringify(event), function (err) {
+//     //   if (err) {
+//     //     log.error(
+//     //       "Error while storing webhooks messages for Clickhouse bulk:",
+//     //       err
+//     //     );
+//     //   }
+//     // });
+//     send(res, 200, {
+//       status: "ok",
+//     });
+//   }
+// );
 
 router.post(
   "/step",
   passport.authenticate("api", { session: false }),
   API.getGame,
-  Token.Decrypt,
+  // Token.Decrypt,
   // API.Counters,
   // API.isBlockedClient,
   // API.isBlocked,
@@ -201,7 +266,7 @@ router.post(
     // });
     send(res, 200, {
       status: "ok",
-      // attempts: req.body.counters.attempt,
+      attempts: 1,
       prize: {
         id: "pk-4",
         promocode: "56yndn_jj6nh_4h",
@@ -216,22 +281,22 @@ router.post(
   }
 );
 
-router.post(
-  "/leaderboard",
-  passport.authenticate("api", { session: false }),
-  API.getGame,
-  Token.Decrypt,
-  (req, res, next) => {
-    req.body.name = "points";
-    Leaderboard.get(req, function (err, leaderboard) {
-      if (err) return send(res, 500, { status: "failed" });
-      send(res, 200, {
-        status: "ok",
-        rating: leaderboard,
-      });
-    });
-  }
-);
+// router.post(
+//   "/leaderboard",
+//   passport.authenticate("api", { session: false }),
+//   API.getGame,
+//   Token.Decrypt,
+//   (req, res, next) => {
+//     req.body.name = "points";
+//     Leaderboard.get(req, function (err, leaderboard) {
+//       if (err) return send(res, 500, { status: "failed" });
+//       send(res, 200, {
+//         status: "ok",
+//         rating: leaderboard,
+//       });
+//     });
+//   }
+// );
 
 // router.post(
 //   "/tasks",
@@ -327,31 +392,31 @@ router.post(
 //   }
 // );
 
-router.post(
-  "/referal",
-  passport.authenticate("api", { session: false }),
-  API.getGame,
-  Token.Decrypt,
-  API.Counters,
-  API.isBlockedClient,
-  API.isBlocked,
-  API.isBlockedIP,
-  async (req, res, next) => {
-    // const status = await addAttemptsToDonor(req);
+// router.post(
+//   "/referal",
+//   passport.authenticate("api", { session: false }),
+//   API.getGame,
+//   Token.Decrypt,
+//   API.Counters,
+//   API.isBlockedClient,
+//   API.isBlocked,
+//   API.isBlockedIP,
+//   async (req, res, next) => {
+//     // const status = await addAttemptsToDonor(req);
 
-    //TODO create publishTrigger
+//     //TODO create publishTrigger
 
-    if (!status) {
-      send(res, 500, {
-        status: "failed",
-      });
-    }
+//     if (!status) {
+//       send(res, 500, {
+//         status: "failed",
+//       });
+//     }
 
-    send(res, 200, {
-      status: "ok",
-    });
-  }
-);
+//     send(res, 200, {
+//       status: "ok",
+//     });
+//   }
+// );
 
 router.post("/healthcheck", (req, res, next) => {
   log.warn(

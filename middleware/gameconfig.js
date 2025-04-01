@@ -48,52 +48,54 @@ const createDefaultUserCounters = async (req) => {
 
 // const donorCounters = syn;
 
-const addAttemptsToDonor = async (req) => {
-  const donorProfileId = req.body.context.referalCode;
+// const addAttemptsToDonor = async (req) => {
+//   const donorProfileId = req.body.context.referalCode;
 
-  const profile_id = req.body.body.profile_id;
-  if (donorProfileId === profile_id) {
-    return false;
-  }
+//   const profile_id = req.body.body.profile_id;
+//   if (donorProfileId === profile_id) {
+//     return false;
+//   }
 
-  if (req.body.counters.isUseReferal === "true") {
-    return false;
-  }
+//   if (req.body.counters.isUseReferal === "true") {
+//     return false;
+//   }
 
-  const attempts = await new Promise((resolve, reject) =>
-    Counter.modify(
-      {
-        body: {
-          game_id: req.body.game.game_id,
-          profile_id: donorProfileId,
-          name: "attempts",
-          value: 1,
-        },
-      },
-      function (err, attempts) {
-        err ? reject(err) : resolve(attempts);
-      }
-    )
-  );
-  req.body.counters.attempts = attempts["attempts"];
+//   const attempts = await new Promise((resolve, reject) =>
+//     Counter.modify(
+//       {
+//         body: {
+//           game_id: req.body.game.game_id,
+//           profile_id: donorProfileId,
+//           name: "attempts",
+//           value: 1,
+//         },
+//       },
+//       function (err, attempts) {
+//         err ? reject(err) : resolve(attempts);
+//       }
+//     )
+//   );
+//   req.body.counters.attempts = attempts["attempts"];
 
-  const isUseReferal = await new Promise((resolve, reject) =>
-    Counter.create(
-      {
-        body: {
-          game_id: req.body.game.game_id,
-          profile_id: profile_id,
-          name: "isUseReferal",
-          value: "true",
-        },
-      },
-      function (err, isUseReferal) {
-        err ? reject(err) : resolve(isUseReferal);
-      }
-    )
-  );
-  req.body.counters.isUseReferal = isUseReferal["isUseReferal"];
-};
+//   const isUseReferal = await new Promise((resolve, reject) =>
+//     Counter.create(
+//       {
+//         body: {
+//           game_id: req.body.game.game_id,
+//           profile_id: profile_id,
+//           name: "isUseReferal",
+//           value: "true",
+//         },
+//       },
+//       function (err, isUseReferal) {
+//         err ? reject(err) : resolve(isUseReferal);
+//       }
+//     )
+//   );
+//   req.body.counters.isUseReferal = isUseReferal["isUseReferal"];
+// };
+
+// const getUserAvailabilityReward
 
 module.exports = {
   createDefaultUserCounters,
