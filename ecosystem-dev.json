@@ -11,25 +11,13 @@
         "API_INSTANCE": "tabby-wheel-games",
         "BASIC_AUTH_USER": "admin",
         "BASIC_AUTH_PASSWORD": "password",
-        "PORT": "3013",
+        "PORT": "3033",
         "LOG_LEVEL": "debug",
         "JWT_SECRET": "asMG?53sdsfkl5kv)1.d.0eui11",
         "REDIS_CONNECTION": "redis://127.0.0.1:6379",
-        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:[dT^fP1#Q8p7}p2s9uvke@beelinenew.accelera.ai:5672",
+        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt:5672",
         "EXCHANGE_NAME": "ex-triggers",
-        "GAME_EXCHANGE_NAME": "ex-accelera-api",
-        "SMS_SERVICE": "https://a2p-sms-https.beeline.ru/proto/http/",
-        "PAYMENT_URL": "https://api-test.partnerka.beeline.ru/api",
-        "PAYMENT_ACCOUNT": "Y3ViZXNvbHV0aW9uc0Bsb2NhbGhvc3QucnU6XjQhVlhHelQ=",
-        "SMS_SENDER": "beelinegame",
-        "SMS_SENDER_ALLOPERATORS": "bgame",
-        "SMS_USERID": "1700631.5",
-        "SMS_PASS": "56366939",
-        "SMS_USERID_ALLOPERATORS": "1739971.2",
-        "SMS_PASS_ALLOPERATORS": "Hw%tNa9H",
-        "APPID": "cubesolutions@localhost.ru",
-        "PARTNER": "testkey",
-        "PAYMENT_SECRET": "testkey"
+        "GAME_EXCHANGE_NAME": "ex-accelera-api"
       },
       "env_production": {
         "TZ": "Europe/Moscow",
@@ -41,21 +29,9 @@
         "LOG_LEVEL": "warn",
         "JWT_SECRET": "asMG?53sdsfkl5kv)1.d.0eui11",
         "REDIS_CONNECTION": "redis://127.0.0.1:6379",
-        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt@devbeeline.accelera.ai:5672",
+        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt:5672",
         "EXCHANGE_NAME": "ex-triggers",
-        "GAME_EXCHANGE_NAME": "ex-accelera-api",
-        "PAYMENT_URL": "https://api.partnerka.beeline.ru",
-        "PAYMENT_ACCOUNT": "Y3ViZXNvbHV0aW9uc0Bsb2NhbGhvc3QucnU6XjQhVlhHelQ=",
-        "SMS_SERVICE": "https://a2p-sms-https.beeline.ru/proto/http/",
-        "SMS_SENDER": "beelinegame",
-        "SMS_SENDER_ALLOPERATORS": "bgame",
-        "SMS_USERID": "1700631.5",
-        "SMS_PASS": "56366939",
-        "SMS_USERID_ALLOPERATORS": "1739971.2",
-        "SMS_PASS_ALLOPERATORS": "Hw%tNa9H",
-        "APPID": "CubeSolutions",
-        "PARTNER": "testkey",
-        "PAYMENT_SECRET": "6Ga#[CaMsf3Z]48-"
+        "GAME_EXCHANGE_NAME": "ex-accelera-api"
       }
     }
   ]
