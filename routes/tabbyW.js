@@ -13,7 +13,7 @@ router.post(
   "/settings",
   passport.authenticate("api", { session: false }),
   API.getGame,
-  async (req, res, next) => {
+  (req, res, next) => {
     send(res, 200, {
       status: "ok",
       onboarding: false,
@@ -37,7 +37,7 @@ router.post(
   "/tasks",
   passport.authenticate("api", { session: false }),
   API.getGame,
-  async (req, res, next) => {
+  (req, res, next) => {
     send(res, 200, {
       status: "ok",
       history: [
