@@ -36,10 +36,10 @@ const accelera = require("../services/producer");
 const Achievements = require("../api/achievements");
 const timeZone = require("moment-timezone");
 const nanoid = require("../services/nanoid");
-const {
-  // createDefaultUserCounters,
-  addAttemptsToDonor,
-} = require("../middleware/gameconfig");
+// const {
+//   // createDefaultUserCounters,
+//   // addAttemptsToDonor,
+// } = require("../middleware/gameconfig");
 const fs = require("fs");
 const csv = require("csv-parser");
 
@@ -337,7 +337,7 @@ router.post(
   API.isBlocked,
   API.isBlockedIP,
   async (req, res, next) => {
-    const status = await addAttemptsToDonor(req);
+    // const status = await addAttemptsToDonor(req);
 
     //TODO create publishTrigger
 

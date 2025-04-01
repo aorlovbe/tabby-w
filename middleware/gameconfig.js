@@ -46,7 +46,7 @@ const createDefaultUserCounters = async (req) => {
   }
 };
 
-const donorCounters = syn;
+// const donorCounters = syn;
 
 const addAttemptsToDonor = async (req) => {
   const donorProfileId = req.body.context.referalCode;
