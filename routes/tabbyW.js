@@ -37,7 +37,7 @@ const Achievements = require("../api/achievements");
 const timeZone = require("moment-timezone");
 const nanoid = require("../services/nanoid");
 const {
-  createDefaultUserCounters,
+  // createDefaultUserCounters,
   addAttemptsToDonor,
 } = require("../middleware/gameconfig");
 const fs = require("fs");
