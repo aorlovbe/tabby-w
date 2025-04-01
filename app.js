@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ limit: "250mb", extended: true }));
 app.use(compression());
 /* Game API routers for games & game management */
 app.use("/api", utils.PMXmark, api);
-app.use("/tabbyW", utils.PMXmark, tabbyW);
+app.use("/tabby", utils.PMXmark, tabbyW);
 app.use("/management", utils.PMXmark, management);
 app.use("/multiplayer", multiplayer);
 app.use("/nakama", nakama);
