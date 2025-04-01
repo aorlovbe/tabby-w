@@ -15,7 +15,7 @@
         "LOG_LEVEL": "debug",
         "JWT_SECRET": "asMG?53sdsfkl5kv)1.d.0eui11",
         "REDIS_CONNECTION": "redis://127.0.0.1:6379",
-        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt:5672",
+        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt@185.32.84.24:5672",
         "EXCHANGE_NAME": "ex-triggers",
         "GAME_EXCHANGE_NAME": "ex-accelera-api"
       },
@@ -29,7 +29,7 @@
         "LOG_LEVEL": "warn",
         "JWT_SECRET": "asMG?53sdsfkl5kv)1.d.0eui11",
         "REDIS_CONNECTION": "redis://127.0.0.1:6379",
-        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt:5672",
+        "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt@185.32.84.24:5672",
         "EXCHANGE_NAME": "ex-triggers",
         "GAME_EXCHANGE_NAME": "ex-accelera-api"
       }
