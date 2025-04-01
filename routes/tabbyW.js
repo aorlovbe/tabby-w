@@ -40,17 +40,39 @@ router.post(
   async (req, res, next) => {
     send(res, 200, {
       status: "ok",
-      onboarding: false,
-      attempts: 1,
-      prizes: [
-        "task_1",
-        "task_3",
-        "task_5",
-        "task_6",
-        "task_7",
-        "task_9",
-        "task_10",
-        "task_11",
+      history: [
+        {
+          id: "svyznoy",
+          status: "completed",
+          task_type: "link",
+          btn_name: "Complete",
+          title: "7 дней Литрес за 0 ₽",
+          short_description: "45 дней подписки для всей семьи дней подписки",
+          full_description:
+            "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
+        },
+      ],
+      active: [
+        {
+          id: "pk-17",
+          task_type: "attempt",
+          title: "7 дней Литрес за 0 ₽",
+          short_description: "45 дней подписки для всей семьи дней подписки",
+          full_description: "",
+          link: "https://cloudbeeline.ru/offers/642fef4be398adf91f0e20b8",
+          btn_name: "Take it!",
+        },
+        {
+          id: "treasure_partner",
+          short_description: "Фильм о новогоднем волшебстве в подарок",
+          full_description:
+            "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
+
+          btn_name: "Complete",
+          link: "https://beeline.tv/settings/coupons/",
+          title: "Рождественская история",
+          task_type: "link",
+        },
       ],
     });
   }
