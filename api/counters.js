@@ -187,23 +187,23 @@ class Counters {
             req.body
           );
 
-          let data = {
-            timestamp: Math.floor(new Date()),
-            event: "accelera-api",
-            page: "counters",
-            profile_id: req.body.player_id,
-            status: "not-modified",
-            game_id: req.body.game_id === undefined ? "" : req.body.game_id,
-            details: req.body.name.toString(),
-            gifts: [req.body.value.toString()],
-            date: moment(new Date()).format("YYYY-MM-DD"),
-            time: moment(new Date()).format("HH:mm"),
-            datetime: moment(momentTimezone.tz("Europe/Moscow")._d).format(
-              "YYYY-MM-DD HH:mm:ss"
-            ),
-          };
+          //   let data = {
+          //     timestamp: Math.floor(new Date()),
+          //     event: "accelera-api",
+          //     page: "counters",
+          //     profile_id: req.body.player_id,
+          //     status: "not-modified",
+          //     game_id: req.body.game_id === undefined ? "" : req.body.game_id,
+          //     details: req.body.name.toString(),
+          //     gifts: [req.body.value.toString()],
+          //     date: moment(new Date()).format("YYYY-MM-DD"),
+          //     time: moment(new Date()).format("HH:mm"),
+          //     datetime: moment(momentTimezone.tz("Europe/Moscow")._d).format(
+          //       "YYYY-MM-DD HH:mm:ss"
+          //     ),
+          //   };
 
-          Bulk.store(req.body.game_id, data, function () {});
+          //   Bulk.store(req.body.game_id, data, function () {});
 
           return callback(true);
         } else {
@@ -215,23 +215,23 @@ class Counters {
             result[0]
           );
 
-          let data = {
-            timestamp: Math.floor(new Date()),
-            event: "accelera-api",
-            page: "counters",
-            player_id: req.body.player_id,
-            status: "modified",
-            game_id: req.body.game_id === undefined ? "" : req.body.game_id,
-            details: req.body.name.toString(),
-            gifts: [req.body.value.toString(), result[0].toString()],
-            date: moment(new Date()).format("YYYY-MM-DD"),
-            time: moment(new Date()).format("HH:mm"),
-            datetime: moment(momentTimezone.tz("Europe/Moscow")._d).format(
-              "YYYY-MM-DD HH:mm:ss"
-            ),
-          };
+          //   let data = {
+          //     timestamp: Math.floor(new Date()),
+          //     event: "accelera-api",
+          //     page: "counters",
+          //     player_id: req.body.player_id,
+          //     status: "modified",
+          //     game_id: req.body.game_id === undefined ? "" : req.body.game_id,
+          //     details: req.body.name.toString(),
+          //     gifts: [req.body.value.toString(), result[0].toString()],
+          //     date: moment(new Date()).format("YYYY-MM-DD"),
+          //     time: moment(new Date()).format("HH:mm"),
+          //     datetime: moment(momentTimezone.tz("Europe/Moscow")._d).format(
+          //       "YYYY-MM-DD HH:mm:ss"
+          //     ),
+          //   };
 
-          Bulk.store(req.body.game_id, data, function () {});
+          //   Bulk.store(req.body.game_id, data, function () {});
 
           let counter = {};
           _.set(counter, req.body.name, result[0]);
