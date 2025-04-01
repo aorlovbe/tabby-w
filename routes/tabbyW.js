@@ -81,8 +81,28 @@ router.post(
 router.put(
   "/balance",
   passport.authenticate("api", { session: false }),
-  (req, res, next) => {
+  API.Counters,
+  async (req, res, next) => {
     log.debug("Received counters request:", req.body);
+    // const counterName = req.body.name;
+    if (req.body.counters["attempt"] === undefined) {
+      const attempt = await new Promise((resolve, reject) =>
+        Counter.create(
+          {
+            body: {
+              game_id: req.body.game.game_id,
+              profile_id: req.body.profile_id,
+              name: "attempt",
+              value: 1,
+            },
+          },
+          function (err, attempt) {
+            err ? reject(err) : resolve(attempt);
+          }
+        )
+      );
+      req.body.counters["attempt"] = attempt["attempt"];
+    }
 
     Counter.modify(req, function (err, counter) {
       if (err) return res.end("Failed");

@@ -56,12 +56,12 @@ class Counters {
   }
 
   static findbyprofile(req, callback) {
-    log.info("Searching counters by profile ID:", req.body.profile_id);
+    log.info("Searching counters by profile ID:", req.body.player_id);
     redis.hgetall(
-      counters + req.body.profile_id + ":counters",
+      counters + req.body.player_id + ":counters",
       function (err, result) {
         if (err || result === null) {
-          log.info("There are no counters found for:", req.body.profile_id);
+          log.info("There are no counters found for:", req.body.player_id);
           return callback(false, {});
         } else {
           log.info("Counters found:", _.size(result));
