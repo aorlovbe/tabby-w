@@ -1,0 +1,33 @@
+{
+	"status": "ok",
+	"prizes": [
+		{
+			"id": "svyznoy",
+			"title": "Headline: prize name",
+			"short_description": "45 дней подписки для всей семьи дней подписки",
+			"full_description": "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
+			"percent": 12
+						
+		}, 
+		{
+			"id": "svyznoy",
+			"title": "Headline: prize name",
+			"short_description": "45 дней подписки для всей семьи дней подписки",
+			"full_description": "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
+			"percent": 3					
+		},
+		{
+			"id": "svyznoy",
+			"title": "Headline: prize name",
+			"short_description": "45 дней подписки для всей семьи дней подписки",
+			"full_description": "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
+			"percent": 6						
+		},
+		{
+			"id": "svyznoy",
+			"title": "Headline: prize name",
+			"short_description": "45 дней подписки для всей семьи дней подписки",
+			"full_description": "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
+			"percent": 1
+		}]
+}
