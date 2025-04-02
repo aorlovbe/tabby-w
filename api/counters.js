@@ -86,7 +86,7 @@ class Counters {
     redis
       .multi()
       .hset(
-        counters + req.body.profile_id + ":counters",
+        counters + req.body.player_id + ":counters",
         req.body.name,
         req.body.value
       )
@@ -95,7 +95,7 @@ class Counters {
           log.error(
             "Counter cannot be stored:",
             err,
-            req.body.profile_id,
+            req.body.player_id,
             req.body
           );
           return callback(true);
@@ -111,7 +111,7 @@ class Counters {
             timestamp: Math.floor(new Date()),
             event: "accelera-api",
             page: "counters",
-            profile_id: req.body.profile_id,
+            profile_id: req.body.player_id,
             status: "created",
             game_id: req.body.game_id === undefined ? "" : req.body.game_id,
             details: req.body.name.toString(),

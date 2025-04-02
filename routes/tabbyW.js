@@ -91,7 +91,7 @@ router.put(
           {
             body: {
               game_id: req.body.game.game_id,
-              profile_id: req.body.profile_id,
+              player_id: req.body.player_id,
               name: "attempt",
               value: 1,
             },
@@ -121,9 +121,9 @@ router.post(
         {
           body: {
             game_id: req.body.game.game_id,
-            profile_id: req.body.profile_id,
+            player_id: req.body.player_id,
             name: "attempt",
-            value: -1,
+            value: 1,
           },
         },
         function (err, attempt) {
