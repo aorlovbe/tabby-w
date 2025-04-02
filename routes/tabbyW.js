@@ -117,14 +117,33 @@ router.post(
   API.getGame,
   API.Counters,
   async (req, res, next) => {
+    if (req.body.counters.attempt) {
+      const attempt = await new Promise((resolve, reject) =>
+        Counter.create(
+          {
+            body: {
+              game_id: req.body.game.game_id,
+              player_id: req.body.player_id,
+              name: "attempt",
+              value: 100,
+            },
+          },
+          function (err, attempt) {
+            err ? reject(err) : resolve(attempt);
+          }
+        )
+      );
+
+      req.body.counters.attempt = attempt["attempt"];
+    }
     const attempt = await new Promise((resolve, reject) =>
-      Counter.create(
+      Counter.modify(
         {
           body: {
             game_id: req.body.game.game_id,
             player_id: req.body.player_id,
             name: "attempt",
-            value: 1,
+            value: -1,
           },
         },
         function (err, attempt) {
