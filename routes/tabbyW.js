@@ -115,6 +115,7 @@ router.post(
   "/step",
   passport.authenticate("api", { session: false }),
   API.getGame,
+  API.Counters,
   async (req, res, next) => {
     const attempt = await new Promise((resolve, reject) =>
       Counter.create(
