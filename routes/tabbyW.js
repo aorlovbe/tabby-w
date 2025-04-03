@@ -13,22 +13,13 @@ router.post(
   "/settings",
   passport.authenticate("api", { session: false }),
   API.getGame,
-  (req, res, next) => {
+  API.Counters,
+  async (req, res, next) => {
     send(res, 200, {
       status: "ok",
-      onboarding: false,
-      attempts: 1,
-      prizes: [
-        "pk-1",
-        "pk-2",
-        "pk-3",
-        "pk-4",
-        "pk-5",
-        "pk-6",
-        "pk-7",
-        "pk-1",
-        "pk-1",
-      ],
+      onboarding: true,
+      attempts: req.body.counters.attempt,
+      prizes: ["r-1", "r-2", "r-3", "r-4", "r-5", "r-6", "r-7", "r-1", "r-1"],
     });
   }
 );
@@ -84,7 +75,6 @@ router.put(
   API.Counters,
   async (req, res, next) => {
     log.debug("Received counters request:", req.body);
-    // const counterName = req.body.name;
     if (req.body.counters["attempt"] === undefined) {
       const attempt = await new Promise((resolve, reject) =>
         Counter.create(
@@ -93,7 +83,7 @@ router.put(
               game_id: req.body.game.game_id,
               player_id: req.body.player_id,
               name: "attempt",
-              value: 1,
+              value: 100,
             },
           },
           function (err, attempt) {
@@ -117,7 +107,7 @@ router.post(
   API.getGame,
   API.Counters,
   async (req, res, next) => {
-    if (req.body.counters.attempt) {
+    if (req.body.counters.attempt === undefined) {
       const attempt = await new Promise((resolve, reject) =>
         Counter.create(
           {
@@ -157,16 +147,7 @@ router.post(
     send(res, 200, {
       status: "ok",
       attempts: req.body.counters.attempt,
-      prize: {
-        id: "pk-4",
-        promocode: "56yndn_jj6nh_4h",
-        btn_name: "Take it!",
-        title: "Headline: prize name",
-        short_description: "45 дней подписки для всей семьи дней подписки",
-        full_description:
-          "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
-        link: "https://cloudbeeline.ru/offers/642fef4be398adf91f0e20b8",
-      },
+      prize: "r-4",
     });
   }
 );

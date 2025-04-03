@@ -175,7 +175,7 @@ class Counters {
       .multi()
       .hincrby(
         counters + req.body.player_id + ":counters",
-        req.body.name,
+        "attempt",
         req.body.value
       )
       .exec(function (err, result) {
@@ -210,7 +210,7 @@ class Counters {
           log.info(
             "Counter is increased:",
             req.body.player_id,
-            req.body.name,
+            "attempt",
             req.body.value,
             result[0]
           );
@@ -222,7 +222,7 @@ class Counters {
           //     player_id: req.body.player_id,
           //     status: "modified",
           //     game_id: req.body.game_id === undefined ? "" : req.body.game_id,
-          //     details: req.body.name.toString(),
+          //     details: "attempt".toString(),
           //     gifts: [req.body.value.toString(), result[0].toString()],
           //     date: moment(new Date()).format("YYYY-MM-DD"),
           //     time: moment(new Date()).format("HH:mm"),
@@ -234,7 +234,7 @@ class Counters {
           //   Bulk.store(req.body.game_id, data, function () {});
 
           let counter = {};
-          _.set(counter, req.body.name, result[0]);
+          _.set(counter, "attempt", result[0]);
           return callback(false, counter);
         }
       });
