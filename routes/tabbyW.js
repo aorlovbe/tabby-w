@@ -93,6 +93,11 @@ router.post(
   API.Counters,
   async (req, res, next) => {
     try {
+      if (req.body.player_id === undefined) {
+        return send(res, 500, {
+          status: "failed",
+        });
+      }
       if (req.body.counters.attempt === undefined) {
         const attempt = await new Promise((resolve, reject) =>
           Counter.create(
