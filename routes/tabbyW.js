@@ -92,15 +92,34 @@ router.post(
   API.getGame,
   API.Counters,
   async (req, res, next) => {
-    if (req.body.counters.attempt === undefined) {
+    try {
+      if (req.body.counters.attempt === undefined) {
+        const attempt = await new Promise((resolve, reject) =>
+          Counter.create(
+            {
+              body: {
+                game_id: req.body.game.game_id,
+                player_id: req.body.player_id,
+                name: "attempt",
+                value: 100,
+              },
+            },
+            function (err, attempt) {
+              err ? reject(err) : resolve(attempt);
+            }
+          )
+        );
+
+        req.body.counters.attempt = attempt["attempt"];
+      }
       const attempt = await new Promise((resolve, reject) =>
-        Counter.create(
+        Counter.modify(
           {
             body: {
               game_id: req.body.game.game_id,
               player_id: req.body.player_id,
               name: "attempt",
-              value: 100,
+              value: -1,
             },
           },
           function (err, attempt) {
@@ -110,42 +129,29 @@ router.post(
       );
 
       req.body.counters.attempt = attempt["attempt"];
+
+      const roll = Math.floor(Math.random() * 100) + 1;
+      let reward;
+
+      // if (roll <= 2) {
+      //   reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
+      // } else {
+      //   reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
+      //     Math.floor(Math.random() * 5)
+      //   ];
+      // }
+
+      send(res, 200, {
+        status: "ok",
+        attempts: req.body.counters.attempt,
+        // prize: _.cloneDeep(reward),
+        prize: "r-1",
+      });
+    } catch (error) {
+      send(res, 500, {
+        status: "failed",
+      });
     }
-    const attempt = await new Promise((resolve, reject) =>
-      Counter.modify(
-        {
-          body: {
-            game_id: req.body.game.game_id,
-            player_id: req.body.player_id,
-            name: "attempt",
-            value: -1,
-          },
-        },
-        function (err, attempt) {
-          err ? reject(err) : resolve(attempt);
-        }
-      )
-    );
-
-    req.body.counters.attempt = attempt["attempt"];
-
-    const roll = Math.floor(Math.random() * 100) + 1;
-    let reward;
-
-    // if (roll <= 2) {
-    //   reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
-    // } else {
-    //   reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
-    //     Math.floor(Math.random() * 5)
-    //   ];
-    // }
-
-    send(res, 200, {
-      status: "ok",
-      attempts: req.body.counters.attempt,
-      // prize: _.cloneDeep(reward),
-      prize: "r-1",
-    });
   }
 );
 

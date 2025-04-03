@@ -38,10 +38,14 @@ async function processCsvFile(filePath) {
 processCsvFile(filePath).then((results) => {
   results.forEach((el) => {
     const clientId = Object.keys(el);
-    /*
-    redis.hset('platfform:tabbyw:' + clientId, JSON.stringify(el.clientId))
-    */
+
+    redis.hset(
+      "platfform:profile:" + clientId,
+      JSON.stringify(el.clientId) + "tasks"
+    );
   });
 
   console.log(JSON.stringify(results));
 });
+/*
+ */

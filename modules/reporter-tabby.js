@@ -25,7 +25,7 @@ let requests = [
       "        gifts[1] as channel,\n" +
       "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as exported,\n" +
       "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as imported\n" +
-      "from beeline.orange where page = 'signup'\n" +
+      "from beeline.tabby where page = 'signup'\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -40,7 +40,7 @@ let requests = [
       "        gifts[1] as channel,\n" +
       "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as exported,\n" +
       "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as imported\n" +
-      "from beeline.orange where page in ('signin', 'signup')\n" +
+      "from beeline.tabby where page in ('signin', 'signup')\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -58,7 +58,7 @@ let requests = [
       "        gifts[1] as number_cell,\n" +
       "        gifts[4] as type_cell_final,\n" +
       "        gifts[3] as number_cell_final\n" +
-      "from beeline.orange where page = 'map' and status = 'step'\n" +
+      "from beeline.tabby where page = 'map' and status = 'step'\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -79,7 +79,7 @@ let requests = [
       "        END AS score,\n" +
       "       JSONExtractRaw(context, 'promocode') as coupon,\n" +
       "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'reason')) as reason\n" +
-      "from beeline.rewards where status = 'created' and game_id = 'orange' and profile_id <> ''\n" +
+      "from beeline.rewards where status = 'created' and game_id = 'tabby' and profile_id <> ''\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} and profile_id <> '' order by timestamp asc))",
   },
   {
@@ -97,7 +97,7 @@ let requests = [
       "        ELSE details\n" +
       "        END AS reward,\n" +
       "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
-      "from beeline.orange where ((page = 'services' and status = 'confirmed') or (page = 'presents' and status = 'present-purchased'))\n" +
+      "from beeline.tabby where ((page = 'services' and status = 'confirmed') or (page = 'presents' and status = 'present-purchased'))\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -116,7 +116,7 @@ let requests = [
       "           when replaceAll(JSONExtractRaw(context, 'status'), '\"', '') = 'active' and status = 'modified' then 'clicked'\n" +
       "           when replaceAll(JSONExtractRaw(context, 'status'), '\"', '') = 'completed' then 'completed'\n" +
       "       END as status_\n" +
-      "from beeline.tasks where status in ('created', 'modified') and game_id = 'orange'\n" +
+      "from beeline.tasks where status in ('created', 'modified') and game_id = 'tabby'\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -128,7 +128,7 @@ let requests = [
       "       12 as game_id,\n" +
       "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'character')) as upper_id,\n" +
       "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as upper_dt\n" +
-      "from beeline.orange where page = 'webhooks' and details = 'character' and profile_id <> '' \n" +
+      "from beeline.tabby where page = 'webhooks' and details = 'character' and profile_id <> '' \n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -152,7 +152,7 @@ let requests = [
       "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'id')) as reward,\n" +
       "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'link')) as link,\n" +
       "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as event_dt\n" +
-      "from beeline.orange where page = 'webhooks' and details <> 'character' and event <> '' and profile_id <> ''\n" +
+      "from beeline.tabby where page = 'webhooks' and details <> 'character' and event <> '' and profile_id <> ''\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -169,7 +169,7 @@ let requests = [
       "        formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as booster_start_dt,\n" +
       "        gifts[2] as booster_end_dt,\n" +
       "        formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
-      "from beeline.orange where context in ('purchase & activation','purchase') and page = 'shop' and status = 'booster-purchased'\n" +
+      "from beeline.tabby where context in ('purchase & activation','purchase') and page = 'shop' and status = 'booster-purchased'\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
@@ -189,7 +189,7 @@ let requests = [
       "       gifts[2] as type_cell,\n" +
       "       gifts[1] as number_cell,\n" +
       "        formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
-      "from beeline.orange where page = 'portals' and status = 'teleported'\n" +
+      "from beeline.tabby where page = 'portals' and status = 'teleported'\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
 ];
@@ -206,7 +206,7 @@ let job = new CronJob(schedule, function () {
   });
 
   //Getting date ranges
-  redis.hgetall("platform:reports:ranges-orange", function (err, ranges) {
+  redis.hgetall("platform:reports:ranges-tabby", function (err, ranges) {
     let from = ranges.to;
     let to = Math.floor(new Date());
 
@@ -221,10 +221,10 @@ let job = new CronJob(schedule, function () {
 
     redis
       .multi()
-      .hset("platform:reports:ranges-orange", "to", to)
-      .hset("platform:reports:ranges-orange", "from", from)
+      .hset("platform:reports:ranges-tabby", "to", to)
+      .hset("platform:reports:ranges-tabby", "from", from)
       .exec(function () {
-        log.warn("orange range dates are updated:", from, to);
+        log.warn("tabby range dates are updated:", from, to);
       });
   });
 });
@@ -239,7 +239,7 @@ function createReport(request, date, ch, from, to, callback) {
     .replace(new RegExp("{{to}}", "g"), to);
 
   redis.hget(
-    "platform:reports:ranges-orange",
+    "platform:reports:ranges-tabby",
     request.filename,
     function (err, last_num) {
       log.warn("Getting end point for", request.filename);
@@ -284,7 +284,7 @@ function createReport(request, date, ch, from, to, callback) {
         redis
           .multi()
           .hincrby(
-            "platform:reports:ranges-orange",
+            "platform:reports:ranges-tabby",
             request.filename,
             stream.supplemental.rows
           )
