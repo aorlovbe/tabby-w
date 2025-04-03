@@ -701,7 +701,7 @@ class API {
   }
 
   static Counters(req, res, next) {
-    log.info("Getting counters for", req.body.profile_id, "in Accelera API");
+    log.info("Getting counters for", req.body.player_id, "in Accelera API");
 
     Counters.findbyprofile(req, function (err, counters) {
       //Storing to clickhouse
