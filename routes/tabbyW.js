@@ -6,8 +6,10 @@ const API = require("../middleware/api");
 const Counter = require("../api/counters");
 const send = require("@polka/send-type");
 const redis = require("../services/redis").redisclient_rewarder;
+const _ = requier("lodash");
 const moment = require("moment");
 const momentTimezone = require("moment-timezone");
+const { getUserInfo } = require("../middleware/acelera-methods");
 
 router.post(
   "/settings",
@@ -28,44 +30,39 @@ router.post(
   "/tasks",
   passport.authenticate("api", { session: false }),
   API.getGame,
-  (req, res, next) => {
-    send(res, 200, {
-      status: "ok",
-      history: [
-        {
-          id: "svyznoy",
-          status: "completed",
-          task_type: "link",
-          btn_name: "Complete",
-          title: "7 дней Литрес за 0 ₽",
-          short_description: "45 дней подписки для всей семьи дней подписки",
-          full_description:
-            "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
-        },
-      ],
-      active: [
-        {
-          id: "pk-17",
-          task_type: "attempt",
-          title: "7 дней Литрес за 0 ₽",
-          short_description: "45 дней подписки для всей семьи дней подписки",
-          full_description: "",
-          link: "https://cloudbeeline.ru/offers/642fef4be398adf91f0e20b8",
-          btn_name: "Take it!",
-        },
-        {
-          id: "treasure_partner",
-          short_description: "Фильм о новогоднем волшебстве в подарок",
-          full_description:
-            "чтобы ваши будни были ярче, а настроение прекрасней - дарим серебряную подвеску от SOKOLOV. Порадуйте себя или близких",
+  async (req, res, next) => {
+    try {
+      const tasks = await getUserInfo(
+        "tasks",
+        req.body.player_id,
+        req.body.game_id
+      );
+      let active_replaced = [];
+      let completed_replaced = [];
 
-          btn_name: "Complete",
-          link: "https://beeline.tv/settings/coupons/",
-          title: "Рождественская история",
-          task_type: "link",
-        },
-      ],
-    });
+      tasks.forEach((el) => {
+        if (el.status === "active") {
+          active_replaced.push(el);
+        }
+
+        if (el.status === "completed") {
+          completed_replaced.push(el);
+        }
+      });
+
+      send(res, 200, {
+        status: "ok",
+        active: _.cloneDeep(active_replaced),
+        history: _.cloneDeep(completed_replaced),
+      });
+    } catch (error) {
+      console.log(error);
+      return send(res, 500, {
+        status: "failed",
+        active: [],
+        history: [],
+      });
+    }
   }
 );
 
@@ -144,10 +141,21 @@ router.post(
 
     req.body.counters.attempt = attempt["attempt"];
 
+    const roll = Math.floor(Math.random() * 100) + 1;
+    let reward;
+
+    if (roll <= 2) {
+      reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
+    } else {
+      reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
+        Math.floor(Math.random() * 5)
+      ];
+    }
+
     send(res, 200, {
       status: "ok",
       attempts: req.body.counters.attempt,
-      prize: "r-4",
+      prize: _.cloneDeep(reward),
     });
   }
 );
