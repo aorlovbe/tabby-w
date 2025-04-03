@@ -35,7 +35,7 @@ async function processCsvFile(filePath) {
   }
 }
 
-processCsvFile(filePath).then((results) => {
+processCsvFile(filePath).then(("ftp/upload_from_tabby/customer_task_eligibility.csv") => {
   results.forEach((el) => {
     const clientId = Object.keys(el);
 
