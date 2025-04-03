@@ -32,35 +32,23 @@ router.post(
   API.getGame,
   async (req, res, next) => {
     try {
+      log.info("get tasks for:", req.body.player_id, req.body.game_id);
+
       const tasks = await getUserInfo(
         "tasks",
         req.body.player_id,
         req.body.game_id
       );
-      let active_replaced = [];
-      let completed_replaced = [];
-
-      tasks.forEach((el) => {
-        if (el.status === "active") {
-          active_replaced.push(el);
-        }
-
-        if (el.status === "completed") {
-          completed_replaced.push(el);
-        }
-      });
 
       send(res, 200, {
         status: "ok",
-        active: _.cloneDeep(active_replaced),
-        history: _.cloneDeep(completed_replaced),
+        tasks,
       });
     } catch (error) {
-      console.log(error);
+      log.error("Error with getting tasks", error);
       return send(res, 500, {
         status: "failed",
-        active: [],
-        history: [],
+        tasks: [],
       });
     }
   }
