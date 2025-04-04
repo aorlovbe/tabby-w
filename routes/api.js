@@ -166,13 +166,13 @@ router.put(
 router.post(
   "/webhooks",
   passport.authenticate("api", { session: false }),
-  API.getGame,
-  Token.Decrypt,
+  // API.getGame,
+  // Token.Decrypt,
   (req, res, next) => {
     log.info(
       "Got webhook from the game:",
       req.body.event,
-      req.body.profile_id,
+      // req.body.profile_id,
       req.body.context
     );
     send(res, 200, {});
@@ -181,7 +181,6 @@ router.post(
       //Publish trigger
       let context =
         req.body.context !== undefined ? _.cloneDeep(req.body.context) : {};
-      context.profile_id = req.body.profile_id;
       context.player_id = req.body.player_id;
 
       if (
@@ -192,7 +191,7 @@ router.post(
       }
 
       API.publish(
-        req.body.profile_id,
+        req.body.player_id,
         req.body.event,
         isJSONstring(context),
         function () {}
@@ -203,10 +202,10 @@ router.post(
         event: "accelera-api",
         page: "webhooks",
         status: "webhook",
-        game_id: req.body.game.game_id,
+        game_id: req.body.game_id,
         details: req.body.event.toString(),
         context: JSON.stringify(isJSONstring(context)),
-        profile_id: req.body.profile_id,
+        profile_id: req.body.player_id,
         player_id:
           req.body.player_id === undefined ? "" : req.body.player_id.toString(),
         timestamp: Math.floor(new Date()),
@@ -217,7 +216,7 @@ router.post(
         ),
       };
 
-      bulk.store(req.body.game.game_id, JSON.stringify(event), function (err) {
+      bulk.store(req.body.game_id, JSON.stringify(event), function (err) {
         if (err) {
           log.error(
             "Error while storing webhooks messages for Clickhouse bulk:",
@@ -228,7 +227,7 @@ router.post(
     } catch (e) {
       log.error(
         "Failed to publish webhook to Accelera Flow:",
-        req.body.profile_id,
+        req.body.player_id,
         req.body.event,
         isJSONstring(req.body.context),
         e

@@ -14,7 +14,7 @@ const { getUserInfo } = require("../middleware/acelera-methods");
 router.post(
   "/settings",
   passport.authenticate("api", { session: false }),
-  API.getGame,
+  // API.getGame,
   API.Counters,
   async (req, res, next) => {
     if (req.body.counters.attempt === undefined) {
@@ -48,7 +48,7 @@ router.post(
 router.post(
   "/tasks",
   passport.authenticate("api", { session: false }),
-  API.getGame,
+  // API.getGame,
   async (req, res, next) => {
     try {
       log.info("get tasks for:", req.body.player_id, req.body.game_id);
@@ -123,7 +123,7 @@ router.put(
 router.post(
   "/step",
   passport.authenticate("api", { session: false }),
-  API.getGame,
+  // API.getGame,
   API.Counters,
   async (req, res, next) => {
     try {
