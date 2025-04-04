@@ -72,10 +72,14 @@ router.post(
           }
         }
       );
-      console.log("usersTasks", usersTasks);
+
+      const formatUsersTasks = usersTasks.forEach((el) =>
+        el.split("_").join("-")
+      );
+      console.log("usersTasks", formatUsersTasks);
 
       const usersAvailableTasks = tasks.filter((el) => {
-        if (usersTasks.includes(el.id)) {
+        if (formatUsersTasks.includes(el.id)) {
           filterdTasks.push(el);
         }
       });
