@@ -1,12 +1,9 @@
-// const { promisify } = require("util");
 const redis = require("../services/redis").redisclient;
-// const pipeline = promisify(redis.pipeline).bind(redis);
-// const infoRedis = promisify(redis.info).bind(redis);
 const csv = require("csv-parser");
 const fs = require("fs");
 const path = require("path");
 // const { log } = require("../services/bunyan");
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 50;
 
 async function processCsvFile(filePath, batch = 0) {
   try {

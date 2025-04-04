@@ -17,6 +17,25 @@ router.post(
   API.getGame,
   API.Counters,
   async (req, res, next) => {
+    if (req.body.counters.attempt === undefined) {
+      const attempt = await new Promise((resolve, reject) =>
+        Counter.create(
+          {
+            body: {
+              game_id: req.body.game.game_id,
+              player_id: req.body.player_id,
+              name: "attempt",
+              value: 100,
+            },
+          },
+          function (err, attempt) {
+            err ? reject(err) : resolve(attempt);
+          }
+        )
+      );
+
+      req.body.counters.attempt = attempt["attempt"];
+    }
     send(res, 200, {
       status: "ok",
       onboarding: true,
@@ -39,10 +58,36 @@ router.post(
         req.body.player_id,
         req.body.game_id
       );
+      let filterdTasks = [];
+
+      let usersTasks = redis.hget(
+        "platform:profile:tasks",
+        req.body.player_id,
+        (result) => {
+          if (result !== null) {
+            let usersAvailabilityForTasks = JSON.parse(result);
+            return usersAvailabilityForTasks;
+          } else {
+            return send(res, 200, {
+              status: "ok",
+              tasks,
+            });
+          }
+        }
+      );
+      console.log("usersTasks", usersTasks);
+
+      const usersAvailableTasks = tasks.filter((el) => {
+        if (usersTasks.includes(el.id)) {
+          filterdTasks.push(el);
+        }
+      });
+
+      console.log("usersAvailableTasks", usersAvailableTasks);
 
       send(res, 200, {
         status: "ok",
-        tasks,
+        tasks: _.cloneDeep(usersAvailableTasks),
       });
     } catch (error) {
       log.error("Error with getting tasks", error);

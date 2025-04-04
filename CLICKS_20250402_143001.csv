@@ -1,6 +1,0 @@
-num;client_id;event;Element_name;Page;Task_id;Prize_id;datetime
-1;testclient1;Click;Tasks;Main;Null;Null;20250331_232505
-2;testclient2;Click;Follow the link;Prizes;Null;P-1;20250331_232648
-2;testclient2;Click;Info;Main;Null;Null;20250331_232648
-2;testclient2;Click;Take it;Tasks;T-1;Null;20250331_232648
-endfile

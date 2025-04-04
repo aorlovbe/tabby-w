@@ -36,7 +36,7 @@ function start() {
             let filename = data[i].name;
             const to = Path.resolve(
               __dirname,
-              "../ftp/download_tabby",
+              "../ftp/download_from_tabby",
               filename
             );
             const from = to_cubesolutions + "/" + data[i].name;
