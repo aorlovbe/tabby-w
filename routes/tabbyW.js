@@ -57,12 +57,31 @@ router.post(
       let filterdTasks = [];
       let formatUsersTasks = [];
 
-      let usersTasks = redis.hget(
+      redis.hget(
         "platform:profile:tasks",
         req.body.player_id,
         (err, result) => {
           if (result !== null) {
-            return result;
+            let usersTasks = result;
+
+            for (let el of usersTasks) {
+              formatUsersTasks.push(el.split("_").join("-"));
+            }
+
+            console.log("formatUsersTasks", formatUsersTasks);
+
+            const usersAvailableTasks = tasks.filter((el) => {
+              if (usersTasks.includes(el.id)) {
+                filterdTasks.push(el);
+              }
+            });
+
+            console.log("usersAvailableTasks", usersAvailableTasks);
+
+            send(res, 200, {
+              status: "ok",
+              tasks: _.cloneDeep(usersAvailableTasks),
+            });
           } else {
             return send(res, 200, {
               status: "ok",
@@ -71,24 +90,6 @@ router.post(
           }
         }
       );
-
-      for (let el of usersTasks) {
-        formatUsersTasks.push(el.split("_").join("-"));
-      }
-      console.log("formatUsersTasks", formatUsersTasks);
-
-      const usersAvailableTasks = tasks.filter((el) => {
-        if (usersTasks.includes(el.id)) {
-          filterdTasks.push(el);
-        }
-      });
-
-      console.log("usersAvailableTasks", usersAvailableTasks);
-
-      send(res, 200, {
-        status: "ok",
-        tasks: _.cloneDeep(usersAvailableTasks),
-      });
     } catch (error) {
       log.error("Error with getting tasks", error);
       return send(res, 500, {
