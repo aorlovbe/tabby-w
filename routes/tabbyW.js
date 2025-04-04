@@ -40,7 +40,7 @@ router.post(
       status: "ok",
       onboarding: true,
       attempts: req.body.counters.attempt,
-      prizes: ["r-1", "r-2", "r-3", "r-4", "r-5", "r-6", "r-7", "r-1", "r-1"],
+      prizes: ["r-1", "r-2", "r-3", "r-4", "r-5", "r-6", "r-7"],
     });
   }
 );
@@ -62,13 +62,9 @@ router.post(
           if (result !== null) {
             let usersTasks = result.split("_").join("-");
 
-            console.log("usersTasks", usersTasks);
-
             const usersAvailableTasks = tasks.filter((el) =>
               usersTasks.includes(el.id)
             );
-
-            console.log("usersAvailableTasks", usersAvailableTasks);
 
             send(res, 200, {
               status: "ok",
@@ -176,19 +172,19 @@ router.post(
       const roll = Math.floor(Math.random() * 100) + 1;
       let reward;
 
-      // if (roll <= 2) {
-      //   reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
-      // } else {
-      //   reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
-      //     Math.floor(Math.random() * 5)
-      //   ];
-      // }
+      if (roll <= 2) {
+        reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
+      } else {
+        reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
+          Math.floor(Math.random() * 5)
+        ];
+      }
 
       send(res, 200, {
         status: "ok",
         attempts: req.body.counters.attempt,
-        // prize: _.cloneDeep(reward),
-        prize: "r-1",
+        prize: _.cloneDeep(reward),
+        // prize: "r-1",
       });
     } catch (error) {
       send(res, 500, {
