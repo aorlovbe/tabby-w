@@ -62,9 +62,7 @@ router.post(
         req.body.player_id,
         (err, result) => {
           if (result !== null) {
-            console.log(result);
-
-            return JSON.parse(result).forEach((el) => el.split("_").join("-"));
+            return JSON.parse(result);
           } else {
             return send(res, 200, {
               status: "ok",
@@ -74,7 +72,10 @@ router.post(
         }
       );
 
-      console.log("usersTasks", usersTasks);
+      for (let el of usersTasks) {
+        formatUsersTasks.push(el.split("_").join("-"));
+      }
+      console.log("formatUsersTasks", formatUsersTasks);
 
       const usersAvailableTasks = tasks.filter((el) => {
         if (usersTasks.includes(el.id)) {
