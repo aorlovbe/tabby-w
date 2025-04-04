@@ -62,7 +62,7 @@ router.post(
         req.body.player_id,
         (err, result) => {
           if (result !== null) {
-            return JSON.parse(result);
+            return result;
           } else {
             return send(res, 200, {
               status: "ok",
