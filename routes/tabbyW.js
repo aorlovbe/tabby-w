@@ -53,11 +53,7 @@ router.post(
     try {
       log.info("get tasks for:", req.body.player_id, req.body.game_id);
 
-      const tasks = await getUserInfo(
-        "tasks",
-        req.body.player_id,
-        req.body.game_id
-      );
+      const tasks = await getUserInfo("tasks", req.body.player_id, "tabby");
       let filterdTasks = [];
 
       let usersTasks = redis.hget(
