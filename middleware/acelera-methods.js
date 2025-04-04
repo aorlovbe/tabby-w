@@ -5,7 +5,7 @@ const send = require("@polka/send-type");
 const getUserInfo = async (target, client, gameid) => {
   const result = axios({
     method: "GET",
-    url: `http://devbeeline-api.accelera.ai/v1/internal/${target}/clients/${client}/${gameid}`,
+    url: `https://tabby-api.accelera.ai/v1/internal/${target}/clients/${client}/${gameid}`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -25,7 +25,7 @@ const getUserInfo = async (target, client, gameid) => {
 const createUserReward = async (rewardId, client, gameid) => {
   const reward = axios({
     method: "POST",
-    url: `http://devbeeline-api.accelera.ai/v1/internal/rewards/clients`,
+    url: `https://tabby-api.accelera.ai/v1/internal/rewards/clients`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -48,7 +48,7 @@ const createUserReward = async (rewardId, client, gameid) => {
 const createUserElement = async (elementId, client, gameid, collectionId) => {
   const reward = axios({
     method: "POST",
-    url: `http://devbeeline-api.accelera.ai/v1/internal/collections/clients`,
+    url: `https://tabby-api.accelera.ai/v1/internal/collections/clients`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -73,7 +73,7 @@ const createUserElement = async (elementId, client, gameid, collectionId) => {
 const purchaseChest = async (rewardId, client, gameid) => {
   const reward = axios({
     method: "POST",
-    url: `http://devbeeline-api.accelera.ai/v1/internal/wallet/purchase`,
+    url: `https://tabby-api.accelera.ai/v1/internal/wallet/purchase`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -98,7 +98,7 @@ const purchaseChest = async (rewardId, client, gameid) => {
 const openChest = async (rewardId, client, gameid) => {
   const reward = axios({
     method: "POST",
-    url: `http://devbeeline-api.accelera.ai/v1/internal/items/treasure/open`,
+    url: `https://tabby-api.accelera.ai/v1/internal/items/treasure/open`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -126,7 +126,7 @@ const openChest = async (rewardId, client, gameid) => {
 const getUserRewards = async (gameid) => {
   const rewards = axios({
     method: "GET",
-    url: `http://devbeeline-api.accelera.ai/v1/internal/rewards/environments/${gameid}`,
+    url: `https://tabby-api.accelera.ai/v1/internal/rewards/environments/${gameid}`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -145,7 +145,7 @@ const getUserRewards = async (gameid) => {
 const getCollectionsInfo = async (client) => {
   const tasks = axios({
     method: "GET",
-    url: `http://devbeeline-api.accelera.ai/v1/internal/collections/entities/${client}`,
+    url: `https://tabby-api.accelera.ai/v1/internal/collections/entities/${client}`,
     headers: {
       "Content-Type": "application/json",
     },
