@@ -55,6 +55,7 @@ router.post(
 
       const tasks = await getUserInfo("tasks", req.body.player_id, "tabby");
       let filterdTasks = [];
+      let formatUsersTasks = [];
 
       let usersTasks = redis.hget(
         "platform:profile:tasks",
@@ -62,8 +63,8 @@ router.post(
         (err, result) => {
           if (result !== null) {
             console.log(result);
-            let usersAvailabilityForTasks = JSON.parse(result);
-            return usersAvailabilityForTasks;
+
+            return JSON.parse(result).forEach((el) => el.split("_").join("-"));
           } else {
             return send(res, 200, {
               status: "ok",
@@ -73,9 +74,6 @@ router.post(
         }
       );
 
-      const formatUsersTasks = usersTasks.forEach((el) =>
-        el.split("_").join("-")
-      );
       console.log("usersTasks", formatUsersTasks);
 
       const usersAvailableTasks = tasks.filter((el) => {
