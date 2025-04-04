@@ -54,27 +54,19 @@ router.post(
       log.info("get tasks for:", req.body.player_id, req.body.game_id);
 
       const tasks = await getUserInfo("tasks", req.body.player_id, "tabby");
-      let filterdTasks = [];
-      let formatUsersTasks = [];
 
       redis.hget(
         "platform:profile:tasks",
         req.body.player_id,
         (err, result) => {
           if (result !== null) {
-            let usersTasks = result;
+            let usersTasks = result.split("_").join("-");
 
-            for (let el of usersTasks) {
-              formatUsersTasks.push(el.split("_").join("-"));
-            }
+            console.log("usersTasks", usersTasks);
 
-            console.log("formatUsersTasks", formatUsersTasks);
-
-            const usersAvailableTasks = tasks.filter((el) => {
-              if (formatUsersTasks.includes(el.id)) {
-                filterdTasks.push(el);
-              }
-            });
+            const usersAvailableTasks = tasks.filter((el) =>
+              usersTasks.includes(el.id)
+            );
 
             console.log("usersAvailableTasks", usersAvailableTasks);
 
