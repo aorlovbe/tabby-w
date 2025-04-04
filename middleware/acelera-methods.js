@@ -3,6 +3,7 @@ const log = require("../services/bunyan").log;
 const send = require("@polka/send-type");
 
 const getUserInfo = async (target, client, gameid) => {
+  console.log("target, client, gameid", target, client, gameid);
   const result = axios({
     method: "GET",
     url: `http://devbeeline-api.accelera.ai/v1/internal/${target}/clients/${client}/${gameid}`,
