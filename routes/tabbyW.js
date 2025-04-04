@@ -61,6 +61,7 @@ router.post(
         req.body.player_id,
         (err, result) => {
           if (result !== null) {
+            console.log(result);
             let usersAvailabilityForTasks = JSON.parse(result);
             return usersAvailabilityForTasks;
           } else {
