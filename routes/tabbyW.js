@@ -59,7 +59,7 @@ router.post(
       let usersTasks = redis.hget(
         "platform:profile:tasks",
         req.body.player_id,
-        (result) => {
+        (err, result) => {
           if (result !== null) {
             let usersAvailabilityForTasks = JSON.parse(result);
             return usersAvailabilityForTasks;
