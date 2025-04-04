@@ -71,7 +71,7 @@ router.post(
             console.log("formatUsersTasks", formatUsersTasks);
 
             const usersAvailableTasks = tasks.filter((el) => {
-              if (usersTasks.includes(el.id)) {
+              if (formatUsersTasks.includes(el.id)) {
                 filterdTasks.push(el);
               }
             });
