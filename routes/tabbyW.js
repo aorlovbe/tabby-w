@@ -84,9 +84,11 @@ router.post(
             });
           } else {
             const commonUsersTask = ["task-5", "task-6", "task-7", "task-8"];
+
             const usersCommonFilteredTasks = tasks.filter((el) =>
               commonUsersTask.includes(el.id)
             );
+            console.log("usersCommonFilteredTasks", usersCommonFilteredTasks);
             return send(res, 200, {
               status: "ok",
               taks: _.cloneDeep(usersCommonFilteredTasks),
