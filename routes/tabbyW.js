@@ -39,7 +39,20 @@ router.post(
     send(res, 200, {
       status: "ok",
       attempts: req.body.counters.attempt,
-      prizes: ["r-1", "r-2", "r-3", "r-4", "r-5", "r-6", "r-7"],
+      prizes: [
+        "r-1",
+        "r-2",
+        "r-3",
+        "r-4",
+        "r-5",
+        "r-6",
+        "r-7",
+        "r-8",
+        "r-9",
+        "r-10",
+        "r-11",
+        "r-12",
+      ],
     });
   }
 );
