@@ -47,7 +47,7 @@ function events(target) {
         //Publish trigger
         API.publish(
           result.client_id,
-          "task-" + result.task_id.split("_")[1],
+          "task-" + result.task_id.split("_")[1] + "-completed",
           out,
           function () {}
         );
@@ -57,7 +57,7 @@ function events(target) {
           JSON.stringify({
             timestamp: Math.floor(new Date()),
             profile_id: result.player_id,
-            game_id: "tabby_dev",
+            game_id: "tabby",
             event: "accelera-api",
             page: "tasks-worker",
             status: "processed",

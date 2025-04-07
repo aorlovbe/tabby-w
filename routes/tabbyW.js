@@ -38,7 +38,6 @@ router.post(
     }
     send(res, 200, {
       status: "ok",
-      onboarding: true,
       attempts: req.body.counters.attempt,
       prizes: ["r-1", "r-2", "r-3", "r-4", "r-5", "r-6", "r-7"],
     });
@@ -71,9 +70,13 @@ router.post(
               tasks: _.cloneDeep(usersAvailableTasks),
             });
           } else {
+            const commonUsersTask = ["task-5", "task-6", "task-7", "task-8"];
+            const usersCommonFilteredTasks = tasks.filter((el) =>
+              commonUsersTask.includes(el.id)
+            );
             return send(res, 200, {
               status: "ok",
-              tasks,
+              taks: _.cloneDeep(usersCommonFilteredTasks),
             });
           }
         }
@@ -151,41 +154,46 @@ router.post(
 
         req.body.counters.attempt = attempt["attempt"];
       }
-      const attempt = await new Promise((resolve, reject) =>
-        Counter.modify(
-          {
-            body: {
-              game_id: req.body.game.game_id,
-              player_id: req.body.player_id,
-              name: "attempt",
-              value: -1,
+      if (Number(req.body.counters.attempt) > 0) {
+        const attempt = await new Promise((resolve, reject) =>
+          Counter.modify(
+            {
+              body: {
+                game_id: req.body.game.game_id,
+                player_id: req.body.player_id,
+                name: "attempt",
+                value: -1,
+              },
             },
-          },
-          function (err, attempt) {
-            err ? reject(err) : resolve(attempt);
-          }
-        )
-      );
+            function (err, attempt) {
+              err ? reject(err) : resolve(attempt);
+            }
+          )
+        );
 
-      req.body.counters.attempt = attempt["attempt"];
+        req.body.counters.attempt = attempt["attempt"];
 
-      const roll = Math.floor(Math.random() * 100) + 1;
-      let reward;
+        const roll = Math.floor(Math.random() * 100) + 1;
+        let reward;
 
-      if (roll <= 2) {
-        reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
+        if (roll <= 2) {
+          reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
+        } else {
+          reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
+            Math.floor(Math.random() * 5)
+          ];
+        }
+
+        send(res, 200, {
+          status: "ok",
+          attempts: req.body.counters.attempt,
+          prize: _.cloneDeep(reward),
+        });
       } else {
-        reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
-          Math.floor(Math.random() * 5)
-        ];
+        return send(res, 500, {
+          status: "failed",
+        });
       }
-
-      send(res, 200, {
-        status: "ok",
-        attempts: req.body.counters.attempt,
-        prize: _.cloneDeep(reward),
-        // prize: "r-1",
-      });
     } catch (error) {
       send(res, 500, {
         status: "failed",
