@@ -177,11 +177,19 @@ router.post(
         let reward;
 
         if (roll <= 2) {
-          reward = ["r-6", "r-7"][Math.floor(Math.random() * 2)];
+          reward = ["r-11", "r-12"][Math.floor(Math.random() * 2)];
         } else {
-          reward = ["r-1", "r-2", "r-3", "r-4", "r-5"][
-            Math.floor(Math.random() * 5)
-          ];
+          reward = [
+            "r-1",
+            "r-2",
+            "r-3",
+            "r-4",
+            "r-5",
+            "r-6",
+            "r-7",
+            "r-8",
+            "r-9",
+          ][Math.floor(Math.random() * 5)];
         }
 
         send(res, 200, {
