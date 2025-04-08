@@ -18,7 +18,24 @@ router.post(
   API.Counters,
   async (req, res, next) => {
     let country = req.body.country;
-    console.log("country", country);
+
+    let rewardsPool = [
+      "r-1",
+      "r-2",
+      "r-3",
+      "r-4",
+      "r-5",
+      "r-6",
+      "r-7",
+      "r-8",
+      "r-9",
+      "r-10",
+      country === "ARE" ? "r-11" : "r-12",
+      -SAU,
+    ];
+
+    console.log(rewardsPool);
+
     if (req.body.counters.attempt === undefined) {
       const attempt = await new Promise((resolve, reject) =>
         Counter.create(
@@ -38,24 +55,11 @@ router.post(
 
       req.body.counters.attempt = attempt["attempt"];
     }
-
+    console.log(rewardsPool);
     send(res, 200, {
       status: "ok",
       attempts: req.body.counters.attempt,
-      prizes: [
-        "r-1",
-        "r-2",
-        "r-3",
-        "r-4",
-        "r-5",
-        "r-6",
-        "r-7",
-        // "r-8",
-        // "r-9",
-        // "r-10",
-        // "r-11", - ARE
-        // "r-12", - SAU
-      ],
+      prizes: _.cloneDeep(rewardsPool),
     });
   }
 );
