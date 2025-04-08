@@ -31,7 +31,6 @@ router.post(
       "r-9",
       "r-10",
       country === "ARE" ? "r-11" : "r-12",
-      -SAU,
     ];
 
     console.log(rewardsPool);
