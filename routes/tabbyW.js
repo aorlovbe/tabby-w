@@ -17,6 +17,8 @@ router.post(
   API.getGame,
   API.Counters,
   async (req, res, next) => {
+    let country = req.body.country;
+    console.log("country", country);
     if (req.body.counters.attempt === undefined) {
       const attempt = await new Promise((resolve, reject) =>
         Counter.create(
@@ -36,6 +38,7 @@ router.post(
 
       req.body.counters.attempt = attempt["attempt"];
     }
+
     send(res, 200, {
       status: "ok",
       attempts: req.body.counters.attempt,
@@ -50,8 +53,8 @@ router.post(
         // "r-8",
         // "r-9",
         // "r-10",
-        // "r-11",
-        // "r-12",
+        // "r-11", - ARE
+        // "r-12", - SAU
       ],
     });
   }
@@ -144,6 +147,9 @@ router.post(
   API.Counters,
   async (req, res, next) => {
     try {
+      let country = req.body.country;
+
+      console.log("country", country);
       if (req.body.player_id === undefined) {
         return send(res, 500, {
           status: "failed",
