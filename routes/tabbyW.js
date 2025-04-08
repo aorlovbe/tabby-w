@@ -122,7 +122,7 @@ router.put(
         Counter.create(
           {
             body: {
-              game_id: req.body.game.game_id,
+              game_id: "tabby",
               player_id: req.body.player_id,
               name: "attempt",
               value: 100,
