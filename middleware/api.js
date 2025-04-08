@@ -709,7 +709,7 @@ class API {
         event: "accelera-api",
         page: "counters",
         status: "requested",
-        game_id: req.body.game.game_id,
+        game_id: "tabby",
         details: JSON.stringify(counters),
         player_id:
           req.body.player_id === undefined ? "" : req.body.player_id.toString(),
