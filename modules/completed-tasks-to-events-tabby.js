@@ -82,7 +82,7 @@ function start() {
   glob(
     path.join(
       __dirname,
-      "../ftp/download_tabby",
+      "../ftp/download_from_tabby",
       "@(customer_task_completion_*)"
     ),
     function (er, files) {
