@@ -35,7 +35,7 @@ function events(target) {
       //Transformation function
       if (err) return log.error(err.message);
 
-      if (result.client_id !== "" && Number(result.progress) === 1) {
+      if (result.client_id !== "") {
         let out = {
           requestID: result.profile_id,
           name: "task-" + result.task_id.split("_")[1],
@@ -44,6 +44,7 @@ function events(target) {
 
         log.warn("Processed task:", out);
 
+        console.log("task-" + result.task_id.split("_")[1] + "-completed");
         //Publish trigger
         API.publish(
           result.client_id,
