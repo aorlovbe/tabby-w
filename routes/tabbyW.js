@@ -32,8 +32,6 @@ router.post(
       country === "ARE" ? "r-11" : "r-12",
     ];
 
-    console.log(rewardsPool);
-
     if (req.body.counters.attempt === undefined) {
       const attempt = await new Promise((resolve, reject) =>
         Counter.create(
@@ -53,7 +51,7 @@ router.post(
 
       req.body.counters.attempt = attempt["attempt"];
     }
-    console.log(rewardsPool);
+
     send(res, 200, {
       status: "ok",
       attempts: req.body.counters.attempt,
@@ -151,7 +149,6 @@ router.post(
     try {
       let country = req.body.country;
 
-      console.log("country", country);
       if (req.body.player_id === undefined) {
         return send(res, 500, {
           status: "failed",
