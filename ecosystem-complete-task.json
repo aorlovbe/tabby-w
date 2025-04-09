@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "completed-tasks-parser",
+      "name": "completed-tabby-task",
       "instances": "1",
       "script": "./modules/completed-tasks-to-events-tabby.js",
       "env": {
