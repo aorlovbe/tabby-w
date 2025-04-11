@@ -192,22 +192,31 @@ router.post(
 
         req.body.counters.attempt = attempt["attempt"];
 
-        const roll = Math.floor(Math.random() * 100) + 1;
-        let reward;
+        let rewardsPool = [
+          "r-1",
+          "r-2",
+          "r-3",
+          "r-4",
+          "r-5",
+          country === "ARE" ? "r-6" : "r-7",
+          "r-8",
+          "r-9",
+          "r-10",
+          country === "ARE" ? "r-11" : "r-12",
+        ];
 
-        if (roll <= 2) {
-          reward = country === "ARE" ? "r-11" : "r-12";
+        const roll = Math.floor(Math.random() * 100);
+        let reward;
+        if (roll >= 98) {
+          reward = rewardsPool[rewardsPool.length - 1];
         } else {
-          reward = [
-            "r-1",
-            "r-2",
-            "r-3",
-            "r-4",
-            "r-5",
-            country === "ARE" ? "r-11" : "r-12",
-            "r-8",
-            "r-9",
-          ][Math.floor(Math.random() * 7)];
+          const partSize = 97 / (rewardsPool.length - 1);
+          const index = Math.min(
+            Math.floor(roll / partSize),
+            rewardsPool.length - 2
+          );
+
+          reward = rewardsPool[index];
         }
 
         send(res, 200, {

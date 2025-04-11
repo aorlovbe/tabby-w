@@ -1,51 +1,55 @@
-const csv = require("csv-parser");
-const fs = require("fs");
-const path = require("path");
-const filePath = path.join(__dirname, "./customer.csv");
+function getPrize(country) {
+  // Определяем пул призов в зависимости от страны
+  const rewardsPool = [
+    "r-1",
+    "r-2",
+    "r-3",
+    "r-4",
+    "r-5",
+    country === "ARE" ? "r-6" : "r-7",
+    "r-8",
+    "r-9",
+    "r-10",
+    country === "ARE" ? "r-11" : "r-12",
+  ];
 
-async function processCsvFile(filePath) {
-  try {
-    const results = [];
+  // Генерируем случайное число от 0 до 99
+  const roll = Math.floor(Math.random() * 100);
 
-    const records = await new Promise((resolve, reject) => {
-      const results = [];
+  let reward;
+  if (roll >= 98) {
+    return rewardsPool[rewardsPool.length - 1];
+  } else {
+    const partSize = 97 / (rewardsPool.length - 1);
+    const index = Math.min(Math.floor(roll / partSize), rewardsPool.length - 2);
 
-      fs.createReadStream(filePath)
-        .pipe(csv())
-        .on("data", (data) => results.push(data))
-        .on("error", reject)
-        .on("end", () => resolve(results));
-    });
-
-    records.forEach((record) => {
-      const tasks = Object.entries(record)
-        .slice(1)
-        .filter(([, value]) => value === "True")
-        .map(([key]) => key);
-
-      results.push({
-        [record.client_id]: tasks,
-      });
-    });
-
-    return results;
-  } catch (error) {
-    console.error("Ошибка при обработке файла:", error);
-    return [];
+    return rewardsPool[index];
   }
 }
 
-processCsvFile(filePath).then((results) => {
-  results.forEach((el) => {
-    const clientId = Object.keys(el);
+// Пример использования
+console.log(getPrize("ARE")); // для ОАЭ
+console.log(getPrize("OTHER")); // для других стран
 
-    redis.hset(
-      "platfform:profile:" + clientId,
-      JSON.stringify(el.clientId) + "tasks"
-    );
-  });
+// Функция для проверки статистики
+function testStatistics(country, iterations = 1000) {
+  const results = {};
 
-  console.log(JSON.stringify(results));
-});
-/*
- */
+  for (let i = 0; i < iterations; i++) {
+    const prize = getPrize(country);
+    results[prize] = (results[prize] || 0) + 1;
+  }
+
+  const total = iterations;
+  console.log(
+    `Статистика выпадения призов (${iterations} испытаний для ${country}):`
+  );
+  for (const prize in results) {
+    const percentage = ((results[prize] / total) * 100).toFixed(2);
+    console.log(`${prize}: ${results[prize]} раз (${percentage}%)`);
+  }
+}
+
+// Тестируем статистику
+testStatistics("ARE");
+testStatistics("OTHER");
