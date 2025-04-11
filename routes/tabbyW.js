@@ -218,7 +218,7 @@ router.post(
 
           reward = rewardsPool[index];
         }
-
+        console.log("reward is", reward);
         send(res, 200, {
           status: "ok",
           attempts: req.body.counters.attempt,
