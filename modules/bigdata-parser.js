@@ -2,8 +2,16 @@ const redis = require("../services/redis").redisclient;
 const csv = require("csv-parser");
 const fs = require("fs");
 const path = require("path");
+var glob = require("glob");
 // const { log } = require("../services/bunyan");
 const BATCH_SIZE = 50;
+
+setInterval(function () {
+  log.warn("Starting sftp2 session for Tabby / download");
+  start();
+}, 1000 * 60 * 60 * 24);
+
+start();
 
 async function processCsvFile(filePath, batch = 0) {
   try {
@@ -61,4 +69,24 @@ const hSet = (key, client_id, tasks) =>
     })
   );
 
-processCsvFile("ftp/upload_from_tabby/customer_task_eligibility.csv", 0);
+function start() {
+  glob(
+    path.join(
+      __dirname,
+      "../ftp/download_from_tabby",
+      "@(customer_task_eligibility*)"
+    ),
+    async function (er, files) {
+      if (files.length !== 0) {
+        log.warn("Found tasks files:", files.length);
+
+        await processCsvFile(
+          "ftp/upload_from_tabby/customer_task_eligibility.csv",
+          0
+        );
+      } else {
+        log.warn("Nothing to parse");
+      }
+    }
+  );
+}

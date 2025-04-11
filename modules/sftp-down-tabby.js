@@ -5,7 +5,7 @@ let sftp2 = new Client();
 let fs = require("fs");
 const Path = require("path");
 
-var to_cubesolutions = "/";
+var to_cubesolutions = "/download_from_tabby";
 
 setInterval(function () {
   log.warn("Starting sftp2 session for CITY / download");
@@ -46,9 +46,9 @@ function start() {
             destination.on("finish", function () {
               log.info("Done writing to file %s", filename);
               sftp2
-                .delete(from)
+                .rename(filename, "downloaded_" + filename)
                 .then(() => {
-                  log.warn("Deleted:", filename);
+                  log.warn("Renamed:", filename);
                   f++;
                 })
                 .then(() => {

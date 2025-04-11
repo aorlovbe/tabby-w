@@ -36,10 +36,9 @@ function events(target) {
       if (err) return log.error(err.message);
 
       if (result.client_id !== "") {
-        console.log(result.client_id);
         let out = {
           requestID: result.client_id,
-          name: "task-" + result.task_id.split("_")[1],
+          name: "task-" + result.task_id.split("_")[1] + "-completed",
           load_dttm: result.completion_timestamp,
         };
 

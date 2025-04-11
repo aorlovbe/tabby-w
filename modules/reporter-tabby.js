@@ -10,186 +10,47 @@ process.env.TZ = "Europe/Moscow";
 let schedule = "00 30 * * * *"; // Every hour
 var CronJob = require("cron").CronJob;
 
-// was 1681678800000
-
-// select (rowNumberInAllBlocks()+1+{{lastnum}}) as num
-// and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc
 let requests = [
   {
     filename: "SIGNUP",
-    headers:
-      '"num";"profile_id";"player_id";"game_id";"datetime";"channel";"exported";"imported"',
+    headers: '"num";"client_id";"datetime"',
     request:
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select profile_id, player_id, 12 as game_id,\n" +
-      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime,\n" +
-      "        gifts[1] as channel,\n" +
-      "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as exported,\n" +
-      "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as imported\n" +
-      "from beeline.tabby where page = 'signup'\n" +
+      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select JSONExtractString(context, 'player_id') AS client_id,\n" +
+      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
+      "from beeline_dev.tabby_dev where details = 'signup' and page = 'webhooks' and status = 'webhook' and client_id != ''\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
     filename: "SIGNIN",
-    headers:
-      '"num";"profile_id";"game_id";"datetime";"channel";"exported";"imported"',
+    headers: '"num";"client_id";"datetime"',
     request:
       "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id,\n" +
-      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime,\n" +
-      "        gifts[1] as channel,\n" +
-      "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as exported,\n" +
-      "       formatDateTime(toDateTime(now()), '%Y%m%d_%H%M%S') as imported\n" +
-      "from beeline.tabby where page in ('signin', 'signup')\n" +
-      "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
-  },
-  {
-    filename: "ATTEMPTS",
-    headers:
-      '"num";"profile_id";"game_id";"match";"started";"dice_value";"type_cell";"number_cell";"type_cell_final";"type_cell_final"',
-    request:
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id,\n" +
-      "       additional as attempt_id,\n" +
-      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as started,\n" +
-      "        details as dice_value,\n" +
-      "        gifts[2] as type_cell,\n" +
-      "        gifts[1] as number_cell,\n" +
-      "        gifts[4] as type_cell_final,\n" +
-      "        gifts[3] as number_cell_final\n" +
-      "from beeline.tabby where page = 'map' and status = 'step'\n" +
-      "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
-  },
-  {
-    filename: "REWARDS",
-    headers:
-      '"num";"profile_id";"game_id";"attemt_id";"reward";"datetime";"score";"coupon";"reason"',
-    request:
-      "select num, profile_id, game_id_ as game_id, attemt_id, reward, datetime, score, coupon, reason from (\n" +
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id_,\n" +
-      "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'last_step_uuid')) as attemt_id,\n" +
-      "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'id')) as reward,\n" +
-      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime,\n" +
-      "       CASE\n" +
-      "        WHEN substring(toString(reward), 1, 2) = 'r-' THEN substring(toString(reward), 3, 10)\n" +
-      "        ELSE '0'\n" +
-      "        END AS score,\n" +
-      "       JSONExtractRaw(context, 'promocode') as coupon,\n" +
-      "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'reason')) as reason\n" +
-      "from beeline.rewards where status = 'created' and game_id = 'tabby' and profile_id <> ''\n" +
-      "and timestamp > {{from}} and timestamp <= {{to}} and profile_id <> '' order by timestamp asc))",
-  },
-  {
-    filename: "ACTIVATIONS",
-    headers: '"num";"profile_id";"game_id";"reward";"datetime"',
-    request:
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       CASE\n" +
-      "        WHEN profile_id = '' THEN additional\n" +
-      "        ELSE profile_id\n" +
-      "        END AS profile_id,\n" +
-      "       12 as game_id,\n" +
-      "       CASE\n" +
-      "        WHEN page = 'services' THEN context\n" +
-      "        ELSE details\n" +
-      "        END AS reward,\n" +
+      "       JSONExtractString(context, 'player_id') AS client_id,\n" +
       "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
-      "from beeline.tabby where ((page = 'services' and status = 'confirmed') or (page = 'presents' and status = 'present-purchased'))\n" +
+      "from beeline_dev.tabby_dev where details = 'signin' and page = 'webhooks' and status = 'webhook' and client_id != ''\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
   {
-    filename: "TASKS",
-    headers:
-      '"num";"profile_id";"game_id";"task_id";"task";"datetime";"status"',
+    filename: "ATTEMPT",
+    headers: '"num";"client_id";"started";"reward"',
     request:
       "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id_,\n" +
-      "       splitByChar('-', name)[3] as task_id,\n" +
-      "       name as task,\n" +
+      "       JSONExtractString(context, 'player_id') AS client_id,\n" +
+      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as started,\n" +
+      "       JSONExtractString(context, 'prize') AS reward\n" +
+      "from beeline_dev.tabby_dev where details = 'spin' and page = 'webhooks' and status = 'webhook' and client_id != ''\n" +
+      "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
+  },
+  {
+    filename: "CLICKS",
+    headers: '"num";"client_id";event:prize_id;"datetime"',
+    request:
+      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
+      "       JSONExtractString(context, 'player_id') AS client_id,\n" +
       "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime,\n" +
-      "       CASE\n" +
-      "           when replaceAll(JSONExtractRaw(context, 'status'), '\"', '') = 'active' and status = 'created' then 'created'\n" +
-      "           when replaceAll(JSONExtractRaw(context, 'status'), '\"', '') = 'active' and status = 'modified' then 'clicked'\n" +
-      "           when replaceAll(JSONExtractRaw(context, 'status'), '\"', '') = 'completed' then 'completed'\n" +
-      "       END as status_\n" +
-      "from beeline.tasks where status in ('created', 'modified') and game_id = 'tabby'\n" +
-      "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
-  },
-  {
-    filename: "UPPER",
-    headers: '"num";"profile_id";"game_id";"upper_id";"upper_dt"',
-    request:
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id,\n" +
-      "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'character')) as upper_id,\n" +
-      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as upper_dt\n" +
-      "from beeline.tabby where page = 'webhooks' and details = 'character' and profile_id <> '' \n" +
-      "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
-  },
-  {
-    filename: "APP_WEB_METRICS",
-    headers:
-      '"num";"profile_id";"game_id";"event";"place";"reward";"link";"event_dt"',
-    request:
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id,\n" +
-      "       CASE\n" +
-      "        WHEN details = 'activate-check' THEN 'view'\n" +
-      "        WHEN details = 'activate-click' THEN 'activate'\n" +
-      "        WHEN details = 'lookup' THEN 'lookup'\n" +
-      "       END AS event,\n" +
-      "       CASE\n" +
-      "        WHEN details = 'activate-check' THEN 'rewards'\n" +
-      "        WHEN details = 'activate-click' THEN 'rewards'\n" +
-      "        WHEN details = 'lookup' THEN 'map'\n" +
-      "       END AS place,\n" +
-      "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'id')) as reward,\n" +
-      "       trim(BOTH '\"' FROM JSONExtractRaw(context, 'link')) as link,\n" +
-      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as event_dt\n" +
-      "from beeline.tabby where page = 'webhooks' and details <> 'character' and event <> '' and profile_id <> ''\n" +
-      "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
-  },
-  {
-    filename: "BOOSTERS",
-    headers:
-      '"num";"profile_id";"game_id";"attempt_id";"booster_id";"canceled_booster_id";"booster_start_dt";"booster_end_dt";"datetime"',
-    request:
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id,\n" +
-      "       additional as attempt_id,\n" +
-      "       details as booster_id,\n" +
-      "        gifts[4] as canceled_booster_id,\n" +
-      "        formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as booster_start_dt,\n" +
-      "        gifts[2] as booster_end_dt,\n" +
-      "        formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
-      "from beeline.tabby where context in ('purchase & activation','purchase') and page = 'shop' and status = 'booster-purchased'\n" +
-      "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
-  },
-  {
-    filename: "PORTALS",
-    headers:
-      '"num";"profile_id";"game_id";"attempt_id";"player_choice";"round_num";"type_cell";"number_cell";"datetime"',
-    request:
-      "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       profile_id,\n" +
-      "       12 as game_id,\n" +
-      "       additional as attempt_id,\n" +
-      "       details as player_choice,\n" +
-      "       CASE\n" +
-      "        WHEN gifts[3] = '' THEN '1'\n" +
-      "        ELSE gifts[3]\n" +
-      "        END AS round_num,\n" +
-      "       gifts[2] as type_cell,\n" +
-      "       gifts[1] as number_cell,\n" +
-      "        formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
-      "from beeline.tabby where page = 'portals' and status = 'teleported'\n" +
+      "       JSONExtractString(context, 'id') AS prize_id,\n" +
+      "       JSONExtractString(context, 'info') AS event\n" +
+      "from beeline_dev.tabby_dev where details = 'click' and page = 'webhooks' and status = 'webhook' and client_id != ''\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
 ];
@@ -207,8 +68,12 @@ let job = new CronJob(schedule, function () {
 
   //Getting date ranges
   redis.hgetall("platform:reports:ranges-tabby", function (err, ranges) {
-    let from = ranges.to;
-    let to = Math.floor(new Date());
+    let from;
+    let to = Math.floor(new Date() - 300000);
+
+    ranges === null || ranges === undefined
+      ? (from = 1744318800000)
+      : (from = ranges.to);
 
     let date = moment(timeZone.tz("Europe/Moscow")).format("YYYYMMDD_HHmmss");
     requests.map((request, index) => {
