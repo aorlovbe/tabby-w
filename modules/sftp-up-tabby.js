@@ -28,7 +28,7 @@ function start() {
             host: "msftp.tabby.ai",
             port: "22",
             username: "accelera",
-            privateKey: fs.readFileSync(key),
+            PrivateKey: fs.readFileSync(key),
           })
           .then(() => {
             log.debug("Found .csv files to upload:", files.length);
