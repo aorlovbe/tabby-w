@@ -7,6 +7,7 @@ const Path = require("path");
 var glob = require("glob");
 const path = require("path");
 const Promise = require("bluebird");
+const key = require("../k.txt");
 
 var from_cubesolutions = "/upload_to_tabby";
 
@@ -27,7 +28,7 @@ function start() {
             host: "msftp.tabby.ai",
             port: "22",
             username: "accelera",
-            password: fs.readFileSync("../k.txt"),
+            password: fs.readFileSync(key),
           })
           .then(() => {
             log.debug("Found .csv files to upload:", files.length);
