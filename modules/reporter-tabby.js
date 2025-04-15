@@ -7,7 +7,7 @@ let log = require("../services/bunyan").log;
 const settings = require("../settings");
 let redis = require("../services/redis").redisclient;
 process.env.TZ = "Europe/Moscow";
-let schedule = "00 09 * * * *"; // Every hour
+let schedule = "00 30 * * * *"; // Every hour
 var CronJob = require("cron").CronJob;
 
 let requests = [
@@ -76,7 +76,7 @@ let job = new CronJob(schedule, function () {
     let to = Math.floor(new Date() - 300000);
 
     ranges === null || ranges === undefined
-      ? (from = 1744664400000)
+      ? (from = 1744318800000)
       : (from = ranges.to);
 
     let date = moment(timeZone.tz("Europe/Moscow")).format("YYYYMMDD_HHmmss");
