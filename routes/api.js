@@ -190,12 +190,12 @@ router.post(
         context.link = link.link;
       }
 
-      API.publish(
-        req.body.player_id,
-        req.body.event,
-        isJSONstring(context),
-        function () {}
-      );
+      // API.publish(
+      //   req.body.player_id,
+      //   req.body.event,
+      //   isJSONstring(context),
+      //   function () {}
+      // );
 
       //Update analytics
       let event = {

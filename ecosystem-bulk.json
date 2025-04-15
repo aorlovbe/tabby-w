@@ -8,7 +8,7 @@
     "LOG_LEVEL": "debug",
     "CLICKHOUSE_HOST": "84.201.144.141",
     "CLICKHOUSE_PORT": "8123",
-    "CLICKHOUSE_DATABASE": "beeline_dev",
+    "CLICKHOUSE_DATABASE": "beeline",
     "CLICKHOUSE_LOGIN": "default",
     "CLICKHOUSE_PASSWORD": "helloworld163f8c4e262f87e1bc0c1f3af2"
   }

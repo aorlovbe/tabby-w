@@ -43,13 +43,17 @@ let requests = [
   },
   {
     filename: "CLICKS",
-    headers: '"num";"client_id";event:prize_id;"datetime"',
+    headers:
+      '"num";"client_id";event;element_name;page;task_id;prize_id;"datetime"',
     request:
       "select (rowNumberInAllBlocks()+1+{{lastnum}}) as num, * from (select\n" +
-      "       JSONExtractString(context, 'player_id') AS client_id,\n" +
-      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime,\n" +
-      "       JSONExtractString(context, 'id') AS prize_id,\n" +
-      "       JSONExtractString(context, 'info') AS event\n" +
+      "       player_id AS client_id,\n" +
+      "       details AS event,\n" +
+      "       JSONExtractString(context, 'element_name') AS element_name,\n" +
+      "       JSONExtractString(context, 'page') AS Page,\n" +
+      "       JSONExtractString(context, 'task_id') AS task_id,\n" +
+      "       JSONExtractString(context, 'prize_id') AS prize_id,\n" +
+      "       formatDateTime(toDateTime(timestamp/1000), '%Y%m%d_%H%M%S') as datetime\n" +
       "from beeline_dev.tabby_dev where details = 'click' and page = 'webhooks' and status = 'webhook' and client_id != ''\n" +
       "and timestamp > {{from}} and timestamp <= {{to}} order by timestamp asc)",
   },
@@ -62,7 +66,7 @@ let job = new CronJob(schedule, function () {
     user: "default",
     password: "helloworld163f8c4e262f87e1bc0c1f3af2",
     queryOptions: {
-      database: "beeline",
+      database: "beeline_dev",
     },
   });
 
