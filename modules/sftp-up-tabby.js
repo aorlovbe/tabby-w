@@ -7,7 +7,6 @@ const Path = require("path");
 var glob = require("glob");
 const path = require("path");
 const Promise = require("bluebird");
-const key = require("../k.txt");
 
 var from_cubesolutions = "/upload_to_tabby";
 
@@ -24,7 +23,7 @@ function start() {
     function (er, files) {
       if (files.length !== 0) {
         const privateKey = fs.readFileSync(
-          path.resolve(__dirname, "/opt/tabby-w/k.txt")
+          path.resolve(__dirname, "/opt/tabby-w/k.txt", "utf-8")
         );
         sftp
           .connect({
