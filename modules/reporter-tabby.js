@@ -76,7 +76,7 @@ let job = new CronJob(schedule, function () {
     let to = Math.floor(new Date() - 300000);
 
     ranges === null || ranges === undefined
-      ? (from = 1744318800000)
+      ? (from = 1744664400000)
       : (from = ranges.to);
 
     let date = moment(timeZone.tz("Europe/Moscow")).format("YYYYMMDD_HHmmss");
