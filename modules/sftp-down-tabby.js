@@ -15,13 +15,13 @@ setInterval(function () {
 start();
 
 function start() {
+  const privateKey = fs.readFileSync("openssh_key", "utf-8");
   sftp2
     .connect({
       host: "msftp.tabby.ai",
       port: "22",
       username: "accelera",
-      password:
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDGAgSAw9GFNf4ieIiU7p5VidBnWnIw9Z+1A+r8IvELZEb/dutjNzfbw53QDXnA6g9nLnXFZrlISsDQSLpwRrf1j6oU8H0//ESLV63D5NfyEe+wZkzw1C4v8QA/zU7sy0BbOFk5rNmZ8/Hc1QyFL6z2SJgIqmf58K8kfWMDcRh/4VQEX1KPdxh3pYWofMW7w4HxIN40mjSYvXZOH8XjOD4qJxzeHFIxxmQ3dzRU7xNM4p2gOLMR8t07BjdSS0kxBJiOUXVoG2dxQhaTjeqOzwPuyrkFEYUbbIQ9GBANHw88+E6zWrVfXbq8qhIHkUbLDAEoEe/spg5l5uxdvgM5riv5+Vg9PViVtLzoHy/6uJjMIzI+sWo/HAXhhYu1gX/XrTPYYKu2B9Sggn607JRzoYkFgCFAA1pslD/p4LoVslrbw+yXnRkdyZEk+ngtZ4m9XxQafkn2AGJFxcUGc0XrQspIGGs0qT2/VUW/VlA5Dk3wkkb6rCY/BpWvgb33o8VbKT7dTZQbf113lEJfANm7TE1zlbEBUyPirTdioPotkevyZHNNqaAmZqLMNTcGB+dqBtuvc9fc4+oMw2oVa0y8vhan+cVrV093ZOUmUIBpyanEr5r0Mtfah62G2l8XxDTOauQ0nrzLJKJ1XoRgWbWD3YLKX0nVH1GoKNLgDs9Ip34AvQ==",
+      privateKey: privateKey,
     })
     .then(() => {
       return sftp2.list(to_cubesolutions);
