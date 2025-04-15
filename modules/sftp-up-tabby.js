@@ -22,7 +22,7 @@ function start() {
     path.join(__dirname, "../ftp/upload_to_tabby", "!(uploaded*)"),
     function (er, files) {
       if (files.length !== 0) {
-        const privateKey = fs.readFileSync("/opt/tabby-w/k.txt", "utf-8");
+        const privateKey = fs.readFileSync("/opt/tabby-w/k.pem", "utf-8");
         sftp
           .connect({
             host: "msftp.tabby.ai",
