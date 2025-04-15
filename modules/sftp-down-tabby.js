@@ -46,7 +46,10 @@ function start() {
             destination.on("finish", function () {
               log.info("Done writing to file %s", filename);
               sftp2
-                .rename(filename, "downloaded_" + filename)
+                .rename(
+                  from,
+                  to_cubesolutions + "/" + "downloaded_" + data[i].name
+                )
                 .then(() => {
                   log.warn("Renamed:", filename);
                   f++;
