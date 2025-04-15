@@ -1,0 +1,15 @@
+{
+  "name": "TEST_UP",
+  "instances": "1",
+  "script": "./modules/sftp-up-tabby.js",
+  "env": {
+    "TZ": "Europe/Moscow",
+    "NODE_ENV": "development",
+    "LOG_LEVEL": "debug",
+    "CLICKHOUSE_HOST": "84.201.144.141",
+    "CLICKHOUSE_PORT": "8123",
+    "CLICKHOUSE_DATABASE": "beeline_dev",
+    "CLICKHOUSE_LOGIN": "default",
+    "CLICKHOUSE_PASSWORD": "helloworld163f8c4e262f87e1bc0c1f3af2"
+  }
+}
