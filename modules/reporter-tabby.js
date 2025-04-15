@@ -7,7 +7,7 @@ let log = require("../services/bunyan").log;
 const settings = require("../settings");
 let redis = require("../services/redis").redisclient;
 process.env.TZ = "Europe/Moscow";
-let schedule = "00 30 * * * *"; // Every hour
+let schedule = "00 06 * * * *"; // Every hour
 var CronJob = require("cron").CronJob;
 
 let requests = [
