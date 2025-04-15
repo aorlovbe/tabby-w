@@ -7,7 +7,7 @@ let log = require("../services/bunyan").log;
 const settings = require("../settings");
 let redis = require("../services/redis").redisclient;
 process.env.TZ = "Europe/Moscow";
-let schedule = "00 06 * * * *"; // Every hour
+let schedule = "00 09 * * * *"; // Every hour
 var CronJob = require("cron").CronJob;
 
 let requests = [
@@ -121,7 +121,7 @@ function createReport(request, date, ch, from, to, callback) {
       // This opens up the writeable stream to `output`
       const output = Path.resolve(
         __dirname,
-        "../ftp/upload_orange",
+        "../ftp/upload_to_tabby",
         request.filename + "_" + date + ".csv"
       );
       let writeStream = fs.createWriteStream(output);
