@@ -1,11 +1,11 @@
 {
-  "name": "TEST_REPORTER",
+  "name": "TEST_REPORTER_TB",
   "instances": "1",
   "script": "./modules/reporter-tabby.js",
   "env": {
     "TZ": "Europe/Moscow",
     "NODE_ENV": "development",
-    "LOG_LEVEL": "debug",
+    "LOG_LEVEL": "info",
     "CLICKHOUSE_HOST": "84.201.144.141",
     "CLICKHOUSE_PORT": "8123",
     "CLICKHOUSE_DATABASE": "beeline_dev",

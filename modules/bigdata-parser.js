@@ -69,7 +69,7 @@ const hSet = (key, client_id, tasks) =>
     })
   );
 
-await processCsvFile("ftp/upload_from_tabby/customer_task_eligibility.csv", 0);
+processCsvFile("ftp/upload_from_tabby/customer_task_eligibility.csv", 0);
 
 // function start() {
 //   glob(
