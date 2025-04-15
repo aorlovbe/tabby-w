@@ -23,12 +23,15 @@ function start() {
     path.join(__dirname, "../ftp/upload_to_tabby", "!(uploaded*)"),
     function (er, files) {
       if (files.length !== 0) {
+        const privateKey = fs.readFileSync(
+          path.resolve(__dirname, "/opt/tabby-w/k.txt")
+        );
         sftp
           .connect({
             host: "msftp.tabby.ai",
             port: "22",
             username: "accelera",
-            privateKey: fs.readFileSync(key),
+            privateKey: privateKey,
           })
           .then(() => {
             log.debug("Found .csv files to upload:", files.length);
