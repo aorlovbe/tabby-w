@@ -10,7 +10,7 @@ var to_cubesolutions = "/download_from_tabby";
 setInterval(function () {
   log.warn("Starting sftp2 session for TABBY / download");
   start();
-}, 5000 * 60);
+}, 3600000);
 
 start();
 

@@ -1,5 +1,5 @@
 {
-  "name": "TEST_UP",
+  "name": "TEST_UP_TB",
   "instances": "1",
   "script": "./modules/sftp-up-tabby.js",
   "env": {
