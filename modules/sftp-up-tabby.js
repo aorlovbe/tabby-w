@@ -13,7 +13,7 @@ var from_cubesolutions = "/upload_to_tabby";
 setInterval(function () {
   log.info("Starting TABBY SFTP session / upload");
   start();
-}, 1500 * 60);
+}, 3600000);
 
 start();
 
