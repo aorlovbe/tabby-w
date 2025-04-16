@@ -69,7 +69,7 @@ function start() {
                 setTimeout(function () {
                   sftp.end();
                   log.error("FTP session is over");
-                }, 50000);
+                }, 3600000);
               })
               .catch(function (err) {
                 log.error("Got error while processing files to unzip:", err);
