@@ -5,6 +5,23 @@ const path = require("path");
 var glob = require("glob");
 // const { log } = require("../services/bunyan");
 const BATCH_SIZE = 50;
+let schedule = "* * * * * *";
+//let schedule = '55 59 23 * * 0';
+const CronJob = require("cron").CronJob;
+const { promisify } = require("util");
+const rename = promisify(fs.rename);
+
+async function renameFile(filePath) {
+  const splitPath = filePath.split("/");
+  const newFileName = "parsed_" + splitPath[2];
+  const newPath = splitPath[0] + "/" + splitPath[1] + "/" + newFileName;
+  try {
+    await rename(filePath, newPath);
+    console.log("Файл успешно переименован", newFileName);
+  } catch (error) {
+    console.error("Ошибка при переименовании файла:", error);
+  }
+}
 
 async function processCsvFile(filePath, batch = 0) {
   try {
@@ -12,7 +29,9 @@ async function processCsvFile(filePath, batch = 0) {
     fs.createReadStream(filePath, { encoding: "utf-8" })
       .pipe(csv())
       .on("data", (record) => {
+        console.log(record);
         const clientId = record.client_id;
+        console.log(clientId);
         const tasks = Object.entries(record)
           .slice(1)
           .filter(([, value]) => value === "True")
@@ -43,6 +62,7 @@ async function processCsvFile(filePath, batch = 0) {
             process.exit(1);
           }
         }
+        await renameFile(filePath);
         console.log("DONE");
         process.exit(0);
       });
@@ -62,4 +82,9 @@ const hSet = (key, client_id, tasks) =>
     })
   );
 
-processCsvFile("ftp/upload_from_tabby/customer_task_eligibility.csv", 0);
+// let job = new CronJob(schedule, function () {
+//   processCsvFile("ftp/download_from_tabby/customer_task_eligibility1.csv", 0);
+// });
+processCsvFile("ftp/download_from_tabby/customer_task_eligibility.csv", 0);
+
+// job.start();
