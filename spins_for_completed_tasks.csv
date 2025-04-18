@@ -1,0 +1,5 @@
+num;client_id;task_id;free_spins;datetime
+1;testclient1;task_1;1;20250331_232505
+2;testclient2;task_2;2;20250331_232648
+2;testclient2;task_3;3;20250331_232648
+2;testclient2;task_4;1;20250331_232648

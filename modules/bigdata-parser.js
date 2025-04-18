@@ -83,8 +83,8 @@ const hSet = (key, client_id, tasks) =>
   );
 
 // let job = new CronJob(schedule, function () {
-//   processCsvFile("ftp/upload_to_tabby/customer_task_eligibility.csv", 0);
+//   processCsvFile("ftp/download_from_tabby/customer_task_eligibility.csv", 0);
 // });
-processCsvFile("ftp/upload_to_tabby/customer_task_eligibility.csv", 0);
+processCsvFile("ftp/download_from_tabby/customer_task_eligibility.csv", 0);
 
 // job.start();
