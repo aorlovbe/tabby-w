@@ -18,6 +18,25 @@ router.post(
   API.Counters,
   async (req, res, next) => {
     let country = req.body.country;
+    let now = moment(new Date()).format("DD-MM-YYYY");
+    if (req.body.counters.last_signin === undefined) {
+      const last_signin = await new Promise((resolve, reject) =>
+        Counter.create(
+          {
+            body: {
+              game_id: req.body.game.game_id,
+              player_id: req.body.player_id,
+              name: "last_signin",
+              value: now,
+            },
+          },
+          function (err, last_signin) {
+            err ? reject(err) : resolve(last_signin);
+          }
+        )
+      );
+      req.body.counters.last_signin = last_signin["last_signin"];
+    }
 
     let rewardsPool = [
       "r-1",
@@ -32,7 +51,10 @@ router.post(
       country === "ARE" ? "r-11" : "r-12",
     ];
 
-    if (req.body.counters.attempt === undefined) {
+    if (
+      req.body.counters.attempt === undefined ||
+      req.body.counters.attempt < 0
+    ) {
       const attempt = await new Promise((resolve, reject) =>
         Counter.create(
           {
@@ -40,7 +62,7 @@ router.post(
               game_id: req.body.game.game_id,
               player_id: req.body.player_id,
               name: "attempt",
-              value: 100,
+              value: 1,
             },
           },
           function (err, attempt) {
@@ -98,8 +120,17 @@ router.post(
           }
         }
       );
-    } catch (error) {
-      log.error("Error with getting tasks", error);
+    } catch (err) {
+      const errorMessage = {
+        status: err.response ? err.response.status : "N/A",
+        message: err.message,
+        method: err.config.method,
+        url: err.config.url,
+        data: err.response ? err.response.data : "Нет данных",
+        errorType: err.name,
+      };
+
+      log.error("Error with getting tasks", errorMessage);
       return send(res, 500, {
         status: "failed",
         tasks: [],
@@ -114,7 +145,11 @@ router.put(
   API.Counters,
   async (req, res, next) => {
     log.debug("Received counters request:", req.body);
-    if (req.body.counters["attempt"] === undefined) {
+
+    if (
+      req.body.counters["attempt"] === undefined ||
+      req.body.counters.attempt < 0
+    ) {
       const attempt = await new Promise((resolve, reject) =>
         Counter.create(
           {
@@ -122,7 +157,7 @@ router.put(
               game_id: "tabby",
               player_id: req.body.player_id,
               name: "attempt",
-              value: 100,
+              value: 1,
             },
           },
           function (err, attempt) {
@@ -134,7 +169,7 @@ router.put(
     }
 
     Counter.modify(req, function (err, counter) {
-      if (err) return res.end("Failed");
+      if (err) return res.end("failed");
       res.end(JSON.stringify(counter));
     });
   }
@@ -147,14 +182,26 @@ router.post(
   API.Counters,
   async (req, res, next) => {
     try {
+      let now = moment(new Date()).format("DD-MM-YYYY");
       let country = req.body.country;
+      let reward;
+
+      if (req.body.counters.last_signin !== now) {
+        return send(res, 500, {
+          status: "failed",
+        });
+      }
 
       if (req.body.player_id === undefined) {
         return send(res, 500, {
           status: "failed",
         });
       }
-      if (req.body.counters.attempt === undefined) {
+
+      if (
+        req.body.counters.attempt === undefined ||
+        req.body.counters.attempt < 0
+      ) {
         const attempt = await new Promise((resolve, reject) =>
           Counter.create(
             {
@@ -162,7 +209,7 @@ router.post(
                 game_id: req.body.game.game_id,
                 player_id: req.body.player_id,
                 name: "attempt",
-                value: 100,
+                value: 1,
               },
             },
             function (err, attempt) {
@@ -205,20 +252,21 @@ router.post(
           country === "ARE" ? "r-11" : "r-12",
         ];
 
-        const roll = Math.floor(Math.random() * 100);
-        let reward;
-        if (roll >= 98) {
-          reward = rewardsPool[rewardsPool.length - 1];
-        } else {
-          const partSize = 97 / (rewardsPool.length - 1);
-          const index = Math.min(
-            Math.floor(roll / partSize),
-            rewardsPool.length - 2
-          );
+        if (Number(req.body.counters.attempt) >= 0) {
+          const roll = Math.floor(Math.random() * 100);
+          if (roll >= 98) {
+            reward = rewardsPool[rewardsPool.length - 1];
+          } else {
+            const partSize = 97 / (rewardsPool.length - 1);
+            const index = Math.min(
+              Math.floor(roll / partSize),
+              rewardsPool.length - 2
+            );
 
-          reward = rewardsPool[index];
+            reward = rewardsPool[index];
+          }
         }
-        console.log("reward is", reward);
+
         send(res, 200, {
           status: "ok",
           attempts: req.body.counters.attempt,

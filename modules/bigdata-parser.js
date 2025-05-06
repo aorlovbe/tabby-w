@@ -5,8 +5,8 @@ const path = require("path");
 var glob = require("glob");
 // const { log } = require("../services/bunyan");
 const BATCH_SIZE = 50;
-let schedule = "* * * * * *";
-//let schedule = '55 59 23 * * 0';
+// let schedule = "* * * * * *";
+let schedule = "55 59 23 * * 0";
 const CronJob = require("cron").CronJob;
 const { promisify } = require("util");
 const rename = promisify(fs.rename);
@@ -82,9 +82,10 @@ const hSet = (key, client_id, tasks) =>
     })
   );
 
-// let job = new CronJob(schedule, function () {
-//   processCsvFile("ftp/download_from_tabby/customer_task_eligibility.csv", 0);
-// });
-processCsvFile("ftp/download_from_tabby/customer_task_eligibility.csv", 0);
+let job = new CronJob(schedule, function () {
+  processCsvFile("ftp/download_from_tabby/customer_task_eligibility.csv", 0);
+});
 
-// job.start();
+// processCsvFile("ftp/download_from_tabby/customer_task_eligibility.csv", 0);
+
+job.start();
