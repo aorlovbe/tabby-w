@@ -16,7 +16,18 @@ const getUserInfo = async (target, client, gameid) => {
       return response.data[target];
     })
     .catch((err) => {
-      log.error(`Error with ${target} info`, err);
+      const errorMessage = {
+        status: err.response ? err.response.status : "N/A",
+        message: err.message,
+        method: err.config.method,
+        url: err.config.url,
+        data: err.response ? err.response.data : "Нет данных",
+        errorType: err.name,
+      };
+
+      log.error("Error with userInfo", errorMessage);
+
+      return undefined;
     });
 
   return result;

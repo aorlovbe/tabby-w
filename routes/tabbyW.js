@@ -92,6 +92,13 @@ router.post(
 
       const tasks = await getUserInfo("tasks", req.body.player_id, "tabby");
 
+      if (tasks === undefined) {
+        return send(res, 500, {
+          status: "failed",
+          tasks: [],
+        });
+      }
+
       redis.hget(
         "platform:profile:tasks",
         req.body.player_id,
