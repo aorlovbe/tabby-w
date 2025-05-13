@@ -62,7 +62,7 @@ router.post(
               game_id: req.body.game.game_id,
               player_id: req.body.player_id,
               name: "attempt",
-              value: 1,
+              value: 5,
             },
           },
           function (err, attempt) {
@@ -164,7 +164,7 @@ router.put(
               game_id: "tabby",
               player_id: req.body.player_id,
               name: "attempt",
-              value: 1,
+              value: 5,
             },
           },
           function (err, attempt) {
@@ -216,7 +216,7 @@ router.post(
                 game_id: req.body.game.game_id,
                 player_id: req.body.player_id,
                 name: "attempt",
-                value: 1,
+                value: 5,
               },
             },
             function (err, attempt) {

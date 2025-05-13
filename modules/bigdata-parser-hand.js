@@ -8,7 +8,7 @@ const CronJob = require("cron").CronJob;
 // Конфигурация
 const BATCH_SIZE = 50;
 const FOLDER_PATH = "ftp/download_from_tabby/";
-const CRON_SCHEDULE = "0 * * * *"; // Каждый час
+// const CRON_SCHEDULE = "0 * * * *"; // Каждый час
 const REDIS_KEY = "platform:profile:tasks";
 
 // Увеличиваем лимиты памяти
@@ -93,14 +93,14 @@ async function renameFile(filePath) {
 
 // Запуск с обработкой ошибок
 try {
-  const job = new CronJob(CRON_SCHEDULE, () => {
-    safeProcessFiles().catch(console.error);
-  });
+  // const job = new CronJob(CRON_SCHEDULE, () => {
+  safeProcessFiles().catch(console.error);
+  // });
 
-  job.start();
-  safeProcessFiles().catch(console.error); // Первый запуск
+  // job.start();
+  // safeProcessFiles().catch(console.error); // Первый запуск
 
-  console.log("Скрипт успешно запущен. Расписание:", CRON_SCHEDULE);
+  // console.log("Скрипт успешно запущен. Расписание:", CRON_SCHEDULE);
 } catch (e) {
   console.error("Ошибка запуска скрипта:", e);
   process.exit(1);
