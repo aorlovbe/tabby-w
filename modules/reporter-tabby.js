@@ -61,12 +61,12 @@ let requests = [
 
 let job = new CronJob(schedule, function () {
   const ch = new ClickHouse({
-    host: "84.201.144.141",
+    host: "94.131.83.209",
     port: "8123",
-    user: "default",
-    password: "helloworld163f8c4e262f87e1bc0c1f3af2",
+    user: "accelera",
+    password: "vcmR9PvEtF8O36pbic3nt",
     queryOptions: {
-      database: "beeline_dev",
+      database: "tabby",
     },
   });
 
@@ -76,7 +76,7 @@ let job = new CronJob(schedule, function () {
     let to = Math.floor(new Date() - 300000);
 
     ranges === null || ranges === undefined
-      ? (from = 1744318800000)
+      ? (from = 1746997200000)
       : (from = ranges.to);
 
     let date = moment(timeZone.tz("Europe/Moscow")).format("YYYYMMDD_HHmmss");

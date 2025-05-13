@@ -15,7 +15,7 @@ setInterval(function () {
 start();
 
 function start() {
-  const privateKey = fs.readFileSync("openssh_key", "utf-8");
+  const privateKey = fs.readFileSync("openssh_key.pem", "utf-8");
   sftp2
     .connect({
       host: "msftp.tabby.ai",
