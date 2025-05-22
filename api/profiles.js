@@ -780,7 +780,7 @@ class Profiles {
         let ids = Profiles.getProfileId();
 
         //TODO: only for tabbyW
-        if (req.body.game.game_id === "tabby_dev") {
+        if (req.body.game.game_id === "tabby") {
           crate.getRewardsByCTN(
             req.user.id.substring(1, 11),
             function (err, metkauser) {
@@ -918,7 +918,7 @@ class Profiles {
                   [],
                   function (err, created_map) {
                     redis.hset(
-                      "platform:tabby_dev:optins",
+                      "platform:tabby:optins",
                       ids.id,
                       JSON.stringify(created_map),
                       function (err, done) {
@@ -1940,8 +1940,8 @@ class Profiles {
   static gettabbyWPersonalPartners(req, res, next) {
     redis
       .multi()
-      .hget("platform:tabby_dev:partners", req.body.profile_id)
-      .hget("platform:tabby_dev:additional-promotion", req.body.profile_id)
+      .hget("platform:tabby:partners", req.body.profile_id)
+      .hget("platform:tabby:additional-promotion", req.body.profile_id)
       .exec(function (err, p) {
         log.info("Partners are found in redis", req.body.profile_id, p[0]);
         if (err || p[0] === null) {

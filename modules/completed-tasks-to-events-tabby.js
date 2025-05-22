@@ -1,104 +1,160 @@
 const csv = require("../services/csv-basic");
 const _ = require("lodash");
-var glob = require("glob");
+const glob = require("glob");
 const path = require("path");
 const fs = require("fs");
 const Promise = require("bluebird");
 const log = require("../services/bunyan").log;
-let bulk = require("../services/bulk");
+const bulk = require("../services/bulk");
 const moment = require("moment");
 const timeZone = require("moment-timezone");
 const producer = require("../services/producer");
 const settings = require("../settings");
 const API = require("../middleware/api");
+const Bottleneck = require("bottleneck");
 
-/* ------------------------------------------------------------- */
-/* Accelera Flows triggers producer and Game API events consumer */
-producer.createProducer(settings.instance).then(function () {
-  log.info(
-    "Accelera Game API tabby tasks to event worker is created:",
-    settings.instance
-  );
-  //Starting schedule
-  start();
+// Конфигурация ограничения скорости
+const RATE_LIMIT = settings.publishRateLimit || 20; // сообщений в секунду
+const RATE_LIMIT_INTERVAL = 1000 / RATE_LIMIT;
 
-  setInterval(function () {
-    start();
-  }, 1000 * 60);
+const limiter = new Bottleneck({
+  minTime: RATE_LIMIT_INTERVAL,
+  maxConcurrent: 1,
 });
 
+/* ------------------------------------------------------------- */
+// Запуск продюсера и планировщика
+producer.createProducer(settings.instance).then(function () {
+  log.info("Worker started:", settings.instance);
+  start();
+  setInterval(start, 60000); //
+});
+
+// Отправка события через API с лимитом
+function enqueueEvent(item) {
+  limiter.schedule(() => {
+    return new Promise((resolve) => {
+      API.publish(item.client_id, item.event_name, item.data, (err) => {
+        if (err) {
+          log.error("Publish error:", err);
+        }
+        resolve();
+      });
+    });
+  });
+}
+
+// Обработка одного файла CSV
 function events(target) {
   csv.parse(
     target,
     ",",
     (err, rows, result) => {
-      //Transformation function
-      if (err) return log.error(err.message);
+      if (err) {
+        log.error("Error parsing row:", err.message);
+        return;
+      }
 
-      if (result.client_id !== "") {
-        let out = {
+      try {
+        if (
+          !result ||
+          !result.client_id ||
+          !result.task_id ||
+          !result.completion_timestamp
+        ) {
+          log.warn("Skipping row with missing required fields:", result);
+          return;
+        }
+
+        if (
+          _.isEmpty(result.client_id) ||
+          _.isEmpty(result.task_id) ||
+          _.isEmpty(result.completion_timestamp)
+        ) {
+          log.warn("Skipping row with empty required fields:", result);
+          return;
+        }
+
+        const taskNumberMatch = result.task_id.match(/task_(\d+)/);
+        if (!taskNumberMatch || !taskNumberMatch[1]) return;
+
+        const taskNumber = taskNumberMatch[1];
+        const eventName = `task-${taskNumber}-completed`;
+
+        const out = {
           requestID: result.client_id,
-          name: "task-" + result.task_id.split("_")[1] + "-completed",
+          name: eventName,
           load_dttm: result.completion_timestamp,
         };
 
-        log.warn("Processed task:", out);
+        // Отправка события через ограниченную очередь
+        enqueueEvent({
+          client_id: result.client_id,
+          event_name: eventName,
+          data: out,
+        });
 
-        // console.log("task-" + result.task_id.split("_")[1] + "-completed");
-        //Publish trigger
-        API.publish(
-          result.client_id,
-          "task-" + result.task_id.split("_")[1] + "-completed",
-          out,
-          function () {}
-        );
-
+        // Логируем в bulk
         bulk.store(
-          "tabby_dev",
+          "tabby",
           JSON.stringify({
-            timestamp: Math.floor(new Date()),
-            profile_id: result.player_id,
+            timestamp: Math.floor(Date.now()),
+            profile_id: result.player_id || "unknown",
             game_id: "tabby",
             event: "accelera-api",
             page: "tasks-worker",
             status: "processed",
             additional: JSON.stringify(out),
-            date: moment(timeZone.tz("Europe/Moscow")).format("YYYY-MM-DD"),
-            time: moment(timeZone.tz("Europe/Moscow")).format("HH:mm"),
-            datetime: moment(timeZone.tz("Europe/Moscow")._d).format(
+            datetime: moment(timeZone.tz("Europe/Moscow")).format(
               "YYYY-MM-DD HH:mm:ss"
             ),
           }),
-          function () {}
+          (err) => {
+            if (err) log.error("Error storing bulk data:", err);
+          }
         );
+      } catch (error) {
+        log.error("Error processing row:", error, "Row data:", result);
       }
     },
     (done) => {
-      log.info("Done with a file:", target);
+      log.info("Done with file:", target);
     }
   );
 }
 
+// Поиск и запуск обработки файлов
 function start() {
   glob(
     path.join(
       __dirname,
       "../ftp/download_from_tabby",
-      "@(customer_task_completion_*)"
+      "@(ready_customer_task_completion_*)"
     ),
-    function (er, files) {
-      if (files.length !== 0) {
-        log.warn("Found tasks files:", files.length);
+    (er, files) => {
+      if (er) {
+        log.error("Error finding files:", er);
+        return;
+      }
 
-        Promise.each(files, function (file) {
-          return events(file);
-        })
-          .then(function (result) {})
-          .catch(function (err) {
-            log.error("Got error while processing mission files:", err);
+      if (files.length !== 0) {
+        log.info(`Found ${files.length} files to process`);
+
+        Promise.each(files, (file) => {
+          return new Promise((resolve) => {
+            try {
+              events(file);
+              resolve();
+            } catch (err) {
+              log.error("Error processing file:", file, err);
+              resolve();
+            }
           });
+        })
+          .then(() => log.info("Finished processing all files"))
+          .catch((err) => log.error("Processing error:", err));
       } else {
-        log.warn("Nothing to parse");
+        log.warn("No files found to parse");
       }
     }
   );

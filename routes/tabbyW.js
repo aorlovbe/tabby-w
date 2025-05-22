@@ -19,7 +19,10 @@ router.post(
   async (req, res, next) => {
     let country = req.body.country;
     let now = moment(new Date()).format("DD-MM-YYYY");
-    if (req.body.counters.last_signin === undefined) {
+    if (
+      req.body.counters.last_signin === undefined ||
+      req.body.counters.last_signin !== now
+    ) {
       const last_signin = await new Promise((resolve, reject) =>
         Counter.create(
           {

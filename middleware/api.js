@@ -1840,7 +1840,7 @@ class API {
 
   static getAdditionalRewardsFromCrate(req, res, next) {
     redis.hget(
-      "platform:tabby_dev:additional-promotion",
+      "platform:tabby:additional-promotion",
       req.body.profile_id,
       function (err, result) {
         if (result !== null) {
@@ -1867,7 +1867,7 @@ class API {
 
                 //Storing treasure partners
                 redis.hset(
-                  "platform:tabby_dev:additional-promotion",
+                  "platform:tabby:additional-promotion",
                   req.body.profile_id,
                   JSON.stringify(treasure_partner),
                   function (err, done) {
@@ -1881,7 +1881,7 @@ class API {
                 );
               } else {
                 redis.hset(
-                  "platform:tabby_dev:additional-promotion",
+                  "platform:tabby:additional-promotion",
                   req.body.profile_id,
                   JSON.stringify([]),
                   function (err, done) {
@@ -1896,9 +1896,9 @@ class API {
     );
   }
 
-  static reloadtabby_devRewardsFromCrate(req, res, next) {
+  static reloadtabbyRewardsFromCrate(req, res, next) {
     redis.hget(
-      "platform:tabby_dev:partners",
+      "platform:tabby:partners",
       req.body.profile_id,
       function (err, result) {
         if (result !== null) {
@@ -1909,7 +1909,7 @@ class API {
             req.body.player_id.substring(1, 11),
             function (err, metkauser) {
               log.info(
-                "Reloading tabby_dev rewards from crate.io:",
+                "Reloading tabby rewards from crate.io:",
                 req.body.player_id.substring(1, 11),
                 metkauser
               );
@@ -1925,12 +1925,12 @@ class API {
 
                 //Storing treasure partners
                 redis.hset(
-                  "platform:tabby_dev:partners",
+                  "platform:tabby:partners",
                   req.body.profile_id,
                   JSON.stringify(treasure_partner),
                   function (err, done) {
                     log.info(
-                      "tabby_dev partners are reloaded to redis",
+                      "tabby partners are reloaded to redis",
                       req.body.profile_id,
                       JSON.stringify(treasure_partner)
                     );
@@ -1939,7 +1939,7 @@ class API {
                 );
               } else {
                 redis.hset(
-                  "platform:tabby_dev:partners",
+                  "platform:tabby:partners",
                   req.body.profile_id,
                   JSON.stringify([]),
                   function (err, done) {
@@ -1983,7 +1983,7 @@ class API {
           req.body.game.map_version,
           req.body.profile_id
         );
-        Profiles.crateCreatetabby_devMap(req, [], function (err, created_map) {
+        Profiles.crateCreatetabbyMap(req, [], function (err, created_map) {
           //Storing new map
           let player = {
             profile_id: req.body.profile_id,
@@ -1994,7 +1994,7 @@ class API {
           Counters.create({ body: player }, function (err, updates) {});
 
           redis.hset(
-            "platform:tabby_dev:optins",
+            "platform:tabby:optins",
             req.body.profile_id,
             JSON.stringify(created_map),
             function (err, done) {
@@ -2013,7 +2013,7 @@ class API {
         });
       } else {
         redis.hget(
-          "platform:tabby_dev:optins",
+          "platform:tabby:optins",
           req.body.profile_id,
           function (err, levels) {
             if (err) {
@@ -2037,7 +2037,7 @@ class API {
       }
     } else {
       redis.hget(
-        "platform:tabby_dev:optins",
+        "platform:tabby:optins",
         req.body.profile_id,
         function (err, levels) {
           if (err) {

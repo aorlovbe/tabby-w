@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "completed-tabby-task",
+      "name": "tabby-ct",
       "instances": "1",
       "script": "./modules/completed-tasks-to-events-tabby.js",
       "env": {
@@ -11,6 +11,11 @@
         "API_INSTANCE": "tabby-wheel-games",
         "BASIC_AUTH_USER": "admin",
         "BASIC_AUTH_PASSWORD": "password",
+        "CLICKHOUSE_HOST": "94.131.83.209",
+        "CLICKHOUSE_PORT": "8123",
+        "CLICKHOUSE_DATABASE": "tabby",
+        "CLICKHOUSE_LOGIN": "accelera",
+        "CLICKHOUSE_PASSWORD": "vcmR9PvEtF8O36pbic3nt",
         "JWT_SECRET": "asMG?53sdsfkl5kv)1.d.0eui11",
         "REDIS_CONNECTION": "redis://127.0.0.1:6379",
         "BROKER_CONNECTION": "amqp://rabbitmqaccelera:b4r8R9gChjexyfmCeb6DtKdh859uguaJBfJPd2cDvmvJBx2Lx24mX849JjDukvzt@185.32.84.24:5672",

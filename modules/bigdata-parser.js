@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
 const CronJob = require("cron").CronJob;
-
+//123
 // Конфигурация
 const BATCH_SIZE = 50;
 const FOLDER_PATH = "ftp/download_from_tabby/";
@@ -37,7 +37,7 @@ async function safeProcessFiles() {
 
 function shouldProcessFile(filename) {
   return (
-    filename.startsWith("customer_task_eligibility") &&
+    filename.startsWith("ready_customer_task_eligibility") &&
     !filename.startsWith("parsed_") &&
     filename.endsWith(".csv")
   );
